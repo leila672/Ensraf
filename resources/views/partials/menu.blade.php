@@ -80,7 +80,7 @@
         @can('school_access')
             <li class="c-sidebar-nav-item">
                 <a href="{{ route("admin.schools.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/schools") || request()->is("admin/schools/*") ? "c-active" : "" }}">
-                    <i class="fa-fw fas fa-hotel c-sidebar-nav-icon">
+                    <i class="fa-fw fas fa-building c-sidebar-nav-icon">
 
                     </i>
                     {{ trans('cruds.school.title') }}

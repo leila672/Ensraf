@@ -20,6 +20,16 @@
                 <span class="help-block">{{ trans('cruds.user.fields.name_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="last_name">{{ trans('cruds.user.fields.last_name') }}</label>
+                <input class="form-control {{ $errors->has('last_name') ? 'is-invalid' : '' }}" type="text" name="last_name" id="last_name" value="{{ old('last_name', '') }}" required>
+                @if($errors->has('last_name'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('last_name') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.user.fields.last_name_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label class="required" for="email">{{ trans('cruds.user.fields.email') }}</label>
                 <input class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" type="email" name="email" id="email" value="{{ old('email') }}" required>
                 @if($errors->has('email'))

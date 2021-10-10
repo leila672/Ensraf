@@ -10,16 +10,6 @@
         <form method="POST" action="{{ route("admin.students.store") }}" enctype="multipart/form-data">
             @csrf
             <div class="form-group">
-                <label class="required" for="last_name">{{ trans('cruds.student.fields.last_name') }}</label>
-                <input class="form-control {{ $errors->has('last_name') ? 'is-invalid' : '' }}" type="text" name="last_name" id="last_name" value="{{ old('last_name', '') }}" required>
-                @if($errors->has('last_name'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('last_name') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.student.fields.last_name_helper') }}</span>
-            </div>
-            <div class="form-group">
                 <label class="required" for="number">{{ trans('cruds.student.fields.number') }}</label>
                 <input class="form-control {{ $errors->has('number') ? 'is-invalid' : '' }}" type="number" name="number" id="number" value="{{ old('number', '') }}" step="1" required>
                 @if($errors->has('number'))

@@ -25,9 +25,6 @@
                             {{ trans('cruds.student.fields.id') }}
                         </th>
                         <th>
-                            {{ trans('cruds.student.fields.last_name') }}
-                        </th>
-                        <th>
                             {{ trans('cruds.student.fields.number') }}
                         </th>
                         <th>
@@ -61,9 +58,6 @@
                             </td>
                             <td>
                                 {{ $student->id ?? '' }}
-                            </td>
-                            <td>
-                                {{ $student->last_name ?? '' }}
                             </td>
                             <td>
                                 {{ $student->number ?? '' }}
