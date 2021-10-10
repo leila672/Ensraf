@@ -45,7 +45,7 @@ return [
         'fields'         => [
             'id'                       => 'ID',
             'id_helper'                => ' ',
-            'name'                     => 'Name',
+            'name'                     => 'First name',
             'name_helper'              => ' ',
             'email'                    => 'Email',
             'email_helper'             => ' ',
@@ -71,6 +71,8 @@ return [
             'city_helper'              => ' ',
             'user_type'                => 'User Type',
             'user_type_helper'         => ' ',
+            'last_name'                => 'Last name',
+            'last_name_helper'         => ' ',
         ],
     ],
     'userAlert' => [
@@ -171,8 +173,6 @@ return [
             'company_name_helper'      => ' ',
             'license_number'           => 'License Number',
             'license_number_helper'    => ' ',
-            'last_name'                => 'Last Name',
-            'last_name_helper'         => ' ',
             'user'                     => 'User',
             'user_helper'              => ' ',
             'identity_num'             => 'Identity Num',

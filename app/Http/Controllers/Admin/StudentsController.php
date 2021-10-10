@@ -49,9 +49,6 @@ class StudentsController extends Controller
             $table->editColumn('id', function ($row) {
                 return $row->id ? $row->id : '';
             });
-            $table->editColumn('last_name', function ($row) {
-                return $row->last_name ? $row->last_name : '';
-            });
             $table->editColumn('number', function ($row) {
                 return $row->number ? $row->number : '';
             });

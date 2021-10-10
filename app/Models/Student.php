@@ -63,7 +63,6 @@ class Student extends Model implements HasMedia
     ];
 
     protected $fillable = [
-        'last_name',
         'number',
         'school_id',
         'academic_level',

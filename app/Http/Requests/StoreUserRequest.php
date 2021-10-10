@@ -21,6 +21,10 @@ class StoreUserRequest extends FormRequest
                 'string',
                 'required',
             ],
+            'last_name' => [
+                'string',
+                'required',
+            ],
             'email' => [
                 'required',
                 'unique:users',

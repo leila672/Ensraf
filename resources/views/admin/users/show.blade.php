@@ -33,6 +33,14 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.user.fields.last_name') }}
+                        </th>
+                        <td>
+                            {{ $user->last_name }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.user.fields.email') }}
                         </th>
                         <td>

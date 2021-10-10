@@ -25,9 +25,6 @@
                         {{ trans('cruds.student.fields.id') }}
                     </th>
                     <th>
-                        {{ trans('cruds.student.fields.last_name') }}
-                    </th>
-                    <th>
                         {{ trans('cruds.student.fields.number') }}
                     </th>
                     <th>
@@ -105,7 +102,6 @@
     columns: [
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
-{ data: 'last_name', name: 'last_name' },
 { data: 'number', name: 'number' },
 { data: 'school_name', name: 'school.name' },
 { data: 'academic_level', name: 'academic_level' },
