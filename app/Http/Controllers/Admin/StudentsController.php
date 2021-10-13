@@ -94,7 +94,30 @@ class StudentsController extends Controller
 
     public function store(StoreStudentRequest $request)
     {
-        $student = Student::create($request->all());
+
+
+        $user = User::create([
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'city' => $request->city,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'phone' => $request->phone,
+            'user_type' => 'student',
+        ]);
+
+        $student = Student::create ([
+            'number'=>$request->number,
+            'school_id'=>$request->school_id,
+            'academic_level'=>$request->academic_level,
+            'relative_relation'=>$request->relative_relation,
+            'company_name'=>$request->company_name,
+            'license_number'=>$request->license_number,
+            'user_id'=>$user->id,
+            'identity_num'=>$request->identity_num,
+            'class_number'=>$request->class_number,
+        ]);
 
         foreach ($request->input('identitty_photo', []) as $file) {
             $student->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('identitty_photo');

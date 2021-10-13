@@ -311,4 +311,40 @@ return [
     'team-members'                   => 'Team members',
     'calendar'                       => 'Calendar',
     'messenger'                      => 'Messenger',
+
+
+    'academic_level' => [
+        'First grade'  =>'First grade',
+        'second grade' =>'second grade',
+        'third grade'  =>'third grade',
+        'fourth grade' =>'fourth grade',
+        'Fifth grade'  =>'Fifth grade',
+        'six grade'    =>'six grade' ,
+        'seventh grade'=>'seventh grade',
+        'eight grade'  => 'eight grade',
+        'ninth grade'  =>'ninth grade',
+        'tenth grade'  =>'tenth grade',
+       'eleventh grade'=> 'eleventh grade',
+        'twelve grade' =>'twelve grade'  ,
+            ],
+
+    'class_number' => [
+        'class 1'  =>  'class 1',
+        'class  2' => 'class  2',
+        'class  3' => 'class  3',
+        'class  4' => 'class  4',
+        'class  5' => 'class  5',
+        'class  6' => 'class  6' ,
+        'class  7' => 'class  7',
+        'class  8' => 'class  8',
+        'class  9' => 'class  9' ,
+        'class  10'=> 'class  10',
+    ],
+
+    'relative_relation' => [
+        'father'=>'أب',
+        'brother'=>'أخ',
+        'driver'=>'سائق/باص',
+
+    ],
 ];

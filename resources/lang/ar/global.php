@@ -311,4 +311,47 @@ return [
     'team-members'                   => 'اعضاء الفريق',
     'calendar'                       => 'التقويم',
     'messenger'                      => 'مراسل',
+
+
+
+    'academic_level' => [
+        'First grade'=>'الصف الاول',
+        'second grade' =>'الصف الثاني',
+        'third grade'=>'الصف الثالث',
+        'fourth grade' =>'الصف الرابع',
+        'Fifth grade'=>'الصف الخامس',
+        'six grade'=>'الصف السادس',
+        'seventh grade'=>'الصف السابع',
+        'eight grade'=>'الصف الثامن',
+        'ninth grade' =>'الصف التاسع',
+        'tenth grade'=>'الصف العاشر',
+        'eleventh grade'=>'الصف الحادي عشر ',
+        'twelve grade'=>'الصف الثاني عشر',
+            ],
+
+    'class_number' => [
+        'class 1' => ' الفصل الاول' ,
+        'class  2' => 'الفصل الثاني',
+        'class  3' => 'الفصل الثالث',
+        'class  4' => 'الفصل الرابع',
+        'class  5' => 'الفصل الخامس',
+        'class  6' => 'الفصل السادس',
+        'class  7' => 'الفصل السابع',
+        'class  8' => 'الفصل الثامن',
+        'class  9' => 'الفصل التاسع',
+        'class  10'=> 'الفصل العاشر',
+    ],
+
+    'relative_relation' => [
+        'father'=>'أب',
+        'brother'=>'أخ',
+        'driver'=>'سائق/باص',
+    ],
+
+
+
+
+
+
+
 ];

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html>
 
+<html @if(app()->getLocale() == 'ar') dir="rtl" @endif>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -39,7 +39,7 @@
                 <i class="fas fa-fw fa-bars"></i>
             </button>
 
-            <ul class="c-header-nav ml-auto">
+            <ul class="c-header-nav  @if(app()->getLocale() == 'ar') mr-auto @else ml-auto @endif">
                 @if(count(config('panel.available_languages', [])) > 1)
                     <li class="c-header-nav-item dropdown d-md-down-none">
                         <a class="c-header-nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">

@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'site_title' => 'Ensraf',
+    'site_title' => 'إنصراف',
 ];
