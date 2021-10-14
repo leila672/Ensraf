@@ -43,10 +43,7 @@ class UpdateStudentRequest extends FormRequest
                 'min:-2147483648',
                 'max:2147483647',
             ],
-            'user_id' => [
-                'required',
-                'integer',
-            ],
+            
             'identity_num' => [
                 'string',
                 'required',

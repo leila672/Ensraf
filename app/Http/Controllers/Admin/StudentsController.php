@@ -56,11 +56,12 @@ class StudentsController extends Controller
                 return $row->school ? $row->school->name : '';
             });
 
+
             $table->editColumn('academic_level', function ($row) {
-                return $row->academic_level ? Student::ACADEMIC_LEVEL_SELECT[$row->academic_level] : '';
+                return $row->academic_level ? trans('global.academic_level.'.$row->academic_level ?? '' ): '';
             });
             $table->editColumn('relative_relation', function ($row) {
-                return $row->relative_relation ? Student::RELATIVE_RELATION_SELECT[$row->relative_relation] : '';
+                return $row->relative_relation ? trans('global.relative_relation.'.$row->relative_relation ?? '' ): '';
             });
             $table->editColumn('license_number', function ($row) {
                 return $row->license_number ? $row->license_number : '';
@@ -70,7 +71,7 @@ class StudentsController extends Controller
             });
 
             $table->editColumn('class_number', function ($row) {
-                return $row->class_number ? Student::CLASS_NUMBER_SELECT[$row->class_number] : '';
+                return $row->class_number ? trans('global.class_number.'.$row->class_number ?? '' ): '';
             });
 
             $table->rawColumns(['actions', 'placeholder', 'school', 'user']);
@@ -105,6 +106,7 @@ class StudentsController extends Controller
             'password' => bcrypt($request->password),
             'phone' => $request->phone,
             'user_type' => 'student',
+            'role'
         ]);
 
         $student = Student::create ([
@@ -145,7 +147,32 @@ class StudentsController extends Controller
 
     public function update(UpdateStudentRequest $request, Student $student)
     {
-        $student->update($request->all());
+
+        $student->update([
+            'number'=>$request->number,
+            'school_id'=>$request->school_id,
+            'academic_level'=>$request->academic_level,
+            'relative_relation'=>$request->relative_relation,
+            'company_name'=>$request->company_name,
+            'license_number'=>$request->license_number,
+            'identity_num'=>$request->identity_num,
+            'class_number'=>$request->class_number,
+        ]);
+
+        $user = User::find($student->user_id);
+
+        $user->update([
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'city' => $request->city,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'phone' => $request->phone,
+            'user_type' => 'student',
+        ]);
+
+
 
         if (count($student->identitty_photo) > 0) {
             foreach ($student->identitty_photo as $media) {

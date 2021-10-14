@@ -60,7 +60,7 @@
                             {{ trans('cruds.student.fields.company_name') }}
                         </th>
                         <td>
-                            {{ $student->company_name }}
+                            {{ $student->company_name ?? '' }}
                         </td>
                     </tr>
                     <tr>
@@ -68,7 +68,7 @@
                             {{ trans('cruds.student.fields.license_number') }}
                         </th>
                         <td>
-                            {{ $student->license_number }}
+                            {{ $student->license_number ?? '' }}
                         </td>
                     </tr>
                     <tr>

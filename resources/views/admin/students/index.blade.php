@@ -25,6 +25,15 @@
                         {{ trans('cruds.student.fields.id') }}
                     </th>
                     <th>
+                        {{ trans('cruds.user.fields.name') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.user.fields.last_name') }}
+                    </th>
+                    <th>
+                        {{ trans('cruds.user.fields.email') }}
+                    </th>
+                    <th>
                         {{ trans('cruds.student.fields.number') }}
                     </th>
                     <th>
@@ -34,17 +43,14 @@
                         {{ trans('cruds.student.fields.academic_level') }}
                     </th>
                     <th>
-                        {{ trans('cruds.student.fields.relative_relation') }}
-                    </th>
-                    <th>
-                        {{ trans('cruds.student.fields.license_number') }}
-                    </th>
-                    <th>
-                        {{ trans('cruds.student.fields.user') }}
-                    </th>
-                    <th>
                         {{ trans('cruds.student.fields.class_number') }}
                     </th>
+
+                    <th>
+                        {{ trans('cruds.student.fields.relative_relation') }}
+                    </th>
+
+
                     <th>
                         &nbsp;
                     </th>
@@ -102,13 +108,14 @@
     columns: [
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
+{ data: 'user.name', name: 'user.name' },
+{ data: 'user.last_name', name: 'user.last_name' },
+{ data: 'user.email', name: 'user.email' },
 { data: 'number', name: 'number' },
 { data: 'school_name', name: 'school.name' },
 { data: 'academic_level', name: 'academic_level' },
-{ data: 'relative_relation', name: 'relative_relation' },
-{ data: 'license_number', name: 'license_number' },
-{ data: 'user_email', name: 'user.email' },
 { data: 'class_number', name: 'class_number' },
+{ data: 'relative_relation', name: 'relative_relation' },
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,
@@ -120,7 +127,7 @@
       $($.fn.dataTable.tables(true)).DataTable()
           .columns.adjust();
   });
-  
+
 });
 
 </script>
