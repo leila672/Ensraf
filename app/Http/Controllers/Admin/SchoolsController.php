@@ -7,6 +7,7 @@ use App\Http\Requests\MassDestroySchoolRequest;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
 use App\Models\School;
+use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,7 @@ class SchoolsController extends Controller
     {
         abort_if(Gate::denies('school_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $schools = School::all();
+        $schools = School::with(['user'])->get();
 
         return view('admin.schools.index', compact('schools'));
     }
@@ -26,12 +27,39 @@ class SchoolsController extends Controller
     {
         abort_if(Gate::denies('school_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.schools.create');
+        $users = User::pluck('email', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.schools.create', compact('users'));
     }
 
     public function store(StoreSchoolRequest $request)
     {
-        $school = School::create($request->all());
+
+
+        $user = User::create([
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'city' => $request->city,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'phone' => $request->phone,
+            'user_type' => 'school',
+
+        ]);
+        $school = School::create([
+            'city' => $request->city,
+            'area' => $request->area,
+            'sector' => $request->sector,
+            'name' => $request->name,
+            'classificaion' => $request->classificaion,
+            'longitude' => $request->longitude,
+            'latitude' => $request->latitude,
+            'end_time' => $request->end_time,
+            'start_time' => $request->start_time,
+            'user_id'=>$user->id,
+
+        ]);
 
         return redirect()->route('admin.schools.index');
     }
@@ -40,12 +68,41 @@ class SchoolsController extends Controller
     {
         abort_if(Gate::denies('school_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        return view('admin.schools.edit', compact('school'));
+        $users = User::pluck('email', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        $school->load('user');
+
+        return view('admin.schools.edit', compact('users', 'school'));
     }
 
     public function update(UpdateSchoolRequest $request, School $school)
     {
-        $school->update($request->all());
+        $school->update([
+            'city' => $request->city,
+            'area' => $request->area,
+            'sector' => $request->sector,
+            'name' => $request->name,
+            'classificaion' => $request->classificaion,
+            'longitude' => $request->longitude,
+            'latitude' => $request->latitude,
+            'end_time' => $request->end_time,
+            'start_time' => $request->start_time,
+
+        ]);
+
+        $user = User::find($school->user_id);
+
+        $user->update([
+            'name' => $request->name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'city' => $request->city,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'phone' => $request->phone,
+            'user_type' => 'school',
+        ]);
+
 
         return redirect()->route('admin.schools.index');
     }
@@ -54,7 +111,7 @@ class SchoolsController extends Controller
     {
         abort_if(Gate::denies('school_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $school->load('schoolStudents');
+        $school->load('user', 'schoolStudents');
 
         return view('admin.schools.show', compact('school'));
     }

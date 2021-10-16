@@ -147,6 +147,8 @@ return [
             'end_time_helper'      => ' ',
             'start_time'           => 'وقت البدء ',
             'start_time_helper'    => ' ',
+            'user'                 => 'المستخدم',
+            'user_helper'          => ' ',
         ],
     ],
     'student' => [

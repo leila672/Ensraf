@@ -326,6 +326,19 @@ return [
         'tenth grade'  =>'tenth grade',
        'eleventh grade'=> 'eleventh grade',
         'twelve grade' =>'twelve grade'  ,
+
+        '1'=>'First grade',
+        '2'=>'second grade',
+        '3'=>'third grade',
+        '4'=>'fourth grade',
+        '5'=>'Fifth grade',
+        '6'=>'six grade',
+        '7'=>'seventhgrade',
+        '8'=>'eight grade',
+        '9'=>'ninth grade',
+       '10'=>'tenth grade',
+       '11'=>'eleventh grade',
+       '12'=>'twelve grade',
             ],
 
     'class_number' => [
@@ -339,12 +352,25 @@ return [
         'class  8' => 'class  8',
         'class  9' => 'class  9' ,
         'class  10'=> 'class  10',
+
+        '1'  =>  'class 1',
+        '2' => 'class  2',
+        '3' => 'class  3',
+        '4' => 'class  4',
+        '5' => 'class  5',
+        '6' => 'class  6' ,
+        '7' => 'class  7',
+        '8' => 'class  8',
+        '9' => 'class  9' ,
+        '10'=> 'class  10',
+
+
     ],
 
     'relative_relation' => [
-        'father'=>'أب',
-        'brother'=>'أخ',
-        'driver'=>'سائق/باص',
+        'father'=>'father',
+        'brother'=>'brother',
+        'driver'=>'driver',
 
     ],
 ];

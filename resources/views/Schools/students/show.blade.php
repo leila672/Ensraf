@@ -1,15 +1,15 @@
-@extends('layouts.admin')
+@extends('layouts.Schools')
 @section('content')
 
 <div class="card">
     <div class="card-header">
-        {{ trans('global.show') }} {{ trans('cruds.school.title') }}
+        {{ trans('global.show') }} {{ trans('cruds.student.title') }}
     </div>
 
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
-                <a class="btn btn-default" href="{{ route('admin.schools.index') }}">
+                <a class="btn btn-default" href="{{ route('schools.students.index') }}">
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>
@@ -17,96 +17,100 @@
                 <tbody>
                     <tr>
                         <th>
-                            {{ trans('cruds.school.fields.id') }}
+                            {{ trans('cruds.student.fields.id') }}
                         </th>
                         <td>
-                            {{ $school->id }}
+                            {{ $student->id }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.school.fields.city') }}
+                            {{ trans('cruds.student.fields.number') }}
                         </th>
                         <td>
-                            {{ $school->city }}
+                            {{ $student->number }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.school.fields.area') }}
+                            {{ trans('cruds.student.fields.school') }}
                         </th>
                         <td>
-                            {{ $school->area }}
+                            {{ $student->school->name ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.school.fields.sector') }}
+                            {{ trans('cruds.student.fields.academic_level') }}
                         </th>
                         <td>
-                            {{ $school->sector }}
+                            {{ App\Models\Student::ACADEMIC_LEVEL_SELECT[$student->academic_level] ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.school.fields.name') }}
+                            {{ trans('cruds.student.fields.relative_relation') }}
                         </th>
                         <td>
-                            {{ $school->name }}
+                            {{ App\Models\Student::RELATIVE_RELATION_SELECT[$student->relative_relation] ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.school.fields.classificaion') }}
+                            {{ trans('cruds.student.fields.company_name') }}
                         </th>
                         <td>
-                            {{ $school->classificaion }}
+                            {{ $student->company_name ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.school.fields.longitude') }}
+                            {{ trans('cruds.student.fields.license_number') }}
                         </th>
                         <td>
-                            {{ $school->longitude }}
+                            {{ $student->license_number ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.school.fields.latitude') }}
+                            {{ trans('cruds.student.fields.user') }}
                         </th>
                         <td>
-                            {{ $school->latitude }}
+                            {{ $student->user->email ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.school.fields.end_time') }}
+                            {{ trans('cruds.student.fields.identity_num') }}
                         </th>
                         <td>
-                            {{ $school->end_time }}
+                            {{ $student->identity_num }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.school.fields.start_time') }}
+                            {{ trans('cruds.student.fields.identitty_photo') }}
                         </th>
                         <td>
-                            {{ $school->start_time }}
+                            @foreach($student->identitty_photo as $key => $media)
+                                <a href="{{ $media->getUrl() }}" target="_blank" style="display: inline-block">
+                                    <img src="{{ $media->getUrl('thumb') }}">
+                                </a>
+                            @endforeach
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.school.fields.user') }}
+                            {{ trans('cruds.student.fields.class_number') }}
                         </th>
                         <td>
-                            {{ $school->user->email ?? '' }}
+                            {{ App\Models\Student::CLASS_NUMBER_SELECT[$student->class_number] ?? '' }}
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div class="form-group">
-                <a class="btn btn-default" href="{{ route('admin.schools.index') }}">
+                <a class="btn btn-default" href="{{ route('schools.students.index') }}">
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>
@@ -114,22 +118,6 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        {{ trans('global.relatedData') }}
-    </div>
-    <ul class="nav nav-tabs" role="tablist" id="relationship-tabs">
-        <li class="nav-item">
-            <a class="nav-link" href="#school_students" role="tab" data-toggle="tab">
-                {{ trans('cruds.student.title') }}
-            </a>
-        </li>
-    </ul>
-    <div class="tab-content">
-        <div class="tab-pane" role="tabpanel" id="school_students">
-            @includeIf('admin.schools.relationships.schoolStudents', ['students' => $school->schoolStudents])
-        </div>
-    </div>
-</div>
+
 
 @endsection

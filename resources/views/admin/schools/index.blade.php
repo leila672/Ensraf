@@ -44,6 +44,9 @@
                             {{ trans('cruds.school.fields.start_time') }}
                         </th>
                         <th>
+                            {{ trans('cruds.school.fields.user') }}
+                        </th>
+                        <th>
                             &nbsp;
                         </th>
                     </tr>
@@ -74,6 +77,9 @@
                             </td>
                             <td>
                                 {{ $school->start_time ?? '' }}
+                            </td>
+                            <td>
+                                {{ $school->user->email ?? '' }}
                             </td>
                             <td>
                                 @can('school_show')

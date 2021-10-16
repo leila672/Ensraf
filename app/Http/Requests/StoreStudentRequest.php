@@ -11,7 +11,7 @@ class StoreStudentRequest extends FormRequest
 {
     public function authorize()
     {
-        return Gate::allows('student_create');
+        return true ;
     }
 
     public function rules()
@@ -43,7 +43,7 @@ class StoreStudentRequest extends FormRequest
                 'min:-2147483648',
                 'max:2147483647',
             ],
-            
+
             'identity_num' => [
                 'string',
                 'required',

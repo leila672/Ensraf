@@ -30,6 +30,7 @@ class School extends Model
         'latitude',
         'end_time',
         'start_time',
+        'user_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -38,6 +39,11 @@ class School extends Model
     public function schoolStudents()
     {
         return $this->hasMany(Student::class, 'school_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     protected function serializeDate(DateTimeInterface $date)
