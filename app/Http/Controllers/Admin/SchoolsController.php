@@ -11,6 +11,7 @@ use App\Models\User;
 use Gate;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+Use Alert;
 
 class SchoolsController extends Controller
 {
@@ -34,8 +35,6 @@ class SchoolsController extends Controller
 
     public function store(StoreSchoolRequest $request)
     {
-
-
         $user = User::create([
             'name' => $request->name,
             'last_name' => $request->last_name,
@@ -61,6 +60,7 @@ class SchoolsController extends Controller
 
         ]);
 
+        Alert::success(trans('global.flash.success'), trans('global.flash.created'));
         return redirect()->route('admin.schools.index');
     }
 
@@ -103,7 +103,7 @@ class SchoolsController extends Controller
             'user_type' => 'school',
         ]);
 
-
+        Alert::success(trans('global.flash.success'), trans('global.flash.updated'));
         return redirect()->route('admin.schools.index');
     }
 
@@ -122,6 +122,7 @@ class SchoolsController extends Controller
 
         $school->delete();
 
+        Alert::success(trans('global.flash.success'), trans('global.flash.deleted'));
         return back();
     }
 

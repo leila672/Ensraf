@@ -18,9 +18,10 @@
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
-        "yajra/laravel-datatables-oracle": "^9.9",
         "laraveldaily/laravel-charts": "^0.1.14",
-        "spatie/laravel-medialibrary": "^7.19"
+        "realrashid/sweet-alert": "^4.0",
+        "spatie/laravel-medialibrary": "^7.19",
+        "yajra/laravel-datatables-oracle": "^9.9"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

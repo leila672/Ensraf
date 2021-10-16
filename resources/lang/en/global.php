@@ -373,4 +373,18 @@ return [
         'driver'=>'driver',
 
     ],
+
+    'flash' => [
+        '404' => 'Not Found !!',
+        'error' => 'Something Went Wrong !!',
+        'success' => 'Success',
+        'created' => 'Added Successfully',
+        'updated' => 'Updated Successfully',
+        'deleted' => 'Deleted Successfully',
+        'delete_' => 'Delete?',
+        'sure_' => 'Please ensure and then confirm!',
+        'yes_' => 'Yes, delete it!',
+        'no_' => 'No, cancel!',
+        'fix_errors' => 'Fix Errors Below',
+    ],
 ];
