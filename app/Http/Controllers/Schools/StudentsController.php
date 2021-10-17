@@ -11,6 +11,7 @@ use App\Models\School;
 use App\Models\Student;
 use App\Models\User;
 use Gate;
+use Auth;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,9 +24,10 @@ class StudentsController extends Controller
     public function index(Request $request)
     {
 
+        $school = School::where('user_id',Auth::id())->first();
 
         if ($request->ajax()) {
-            $query = Student::with(['school', 'user'])->select(sprintf('%s.*', (new Student())->table));
+            $query = Student::with(['school', 'user'])->where('school_id',$school->id)->select(sprintf('%s.*', (new Student())->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -86,11 +88,13 @@ class StudentsController extends Controller
     {
 
 
+        $school = School::where('user_id',Auth::id())->first();
+
         $schools = School::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $users = User::pluck('email', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('schools.students.create', compact('schools', 'users'));
+        return view('schools.students.create', compact('schools', 'users','school'));
     }
 
     public function store(StoreStudentRequest $request)
@@ -136,13 +140,15 @@ class StudentsController extends Controller
     {
 
 
+        $school = School::where('user_id',Auth::id())->first();
+
         $schools = School::pluck('name', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $users = User::pluck('email', 'id')->prepend(trans('global.pleaseSelect'), '');
 
         $student->load('school', 'user');
 
-        return view('schools.students.edit', compact('schools', 'users', 'student'));
+        return view('schools.students.edit', compact('schools', 'users', 'student','school'));
     }
 
     public function update(UpdateStudentRequest $request, Student $student)
@@ -167,7 +173,7 @@ class StudentsController extends Controller
             'phone' => $request->phone,
             'city' => $request->city,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'password' => $request->password == null ? $user->password : bcrypt($request->password), 
             'phone' => $request->phone,
             'user_type' => 'student',
         ]);

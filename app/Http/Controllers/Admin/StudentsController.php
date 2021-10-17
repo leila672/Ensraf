@@ -170,7 +170,7 @@ class StudentsController extends Controller
             'phone' => $request->phone,
             'city' => $request->city,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
+            'password' => $request->password == null ? $user->password : bcrypt($request->password), 
             'phone' => $request->phone,
             'user_type' => 'student',
         ]);

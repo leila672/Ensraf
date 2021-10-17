@@ -11,6 +11,8 @@
             @method('PUT')
             @csrf
 
+            <input type="hidden" name="school_id" value="{{ $school->id }}">
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
@@ -59,7 +61,7 @@
                         <label class="required"
                             for="password">{{ trans('cruds.user.fields.password') }}</label>
                         <input class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}"
-                            type="password" name="password" id="password" required>
+                            type="password" name="password" id="password">
                         @if ($errors->has('password'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('password') }}
@@ -107,21 +109,7 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.student.fields.number_helper') }}</span>
-            </div>
-            <div class="form-group">
-                <label class="required" for="school_id">{{ trans('cruds.student.fields.school') }}</label>
-                <select class="form-control select2 {{ $errors->has('school') ? 'is-invalid' : '' }}" name="school_id" id="school_id" required>
-                    @foreach($schools as $id => $entry)
-                        <option value="{{ $id }}" {{ (old('school_id') ? old('school_id') : $student->school->id ?? '') == $id ? 'selected' : '' }}>{{ $entry }}</option>
-                    @endforeach
-                </select>
-                @if($errors->has('school'))
-                    <div class="invalid-feedback">
-                        {{ $errors->first('school') }}
-                    </div>
-                @endif
-                <span class="help-block">{{ trans('cruds.student.fields.school_helper') }}</span>
-            </div>
+            </div> 
             <div class="form-group">
                 <label class="required">{{ trans('cruds.student.fields.academic_level') }}</label>
                 <select class="form-control {{ $errors->has('academic_level') ? 'is-invalid' : '' }}" name="academic_level" id="academic_level" required>

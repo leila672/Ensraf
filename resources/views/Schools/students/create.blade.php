@@ -9,6 +9,7 @@
         <div class="card-body">
             <form method="POST" action="{{ route('schools.students.store') }}" enctype="multipart/form-data">
                 @csrf
+                <input type="hidden" name="school_id" value="{{ $school->id }}">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -95,22 +96,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="required" for="school_id">{{ trans('cruds.student.fields.school') }}</label>
-                    <select class="form-control select2 {{ $errors->has('school') ? 'is-invalid' : '' }}"
-                        name="school_id" id="school_id" required>
-                        @foreach ($schools as $id => $entry)
-                            <option value="{{ $id }}" {{ old('school_id') == $id ? 'selected' : '' }}>
-                                {{ $entry }}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('school'))
-                        <div class="invalid-feedback">
-                            {{ $errors->first('school') }}
-                        </div>
-                    @endif
-                    <span class="help-block">{{ trans('cruds.student.fields.school_helper') }}</span>
-                </div>
+                
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
