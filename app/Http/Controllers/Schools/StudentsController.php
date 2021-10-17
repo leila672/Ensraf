@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
-use alert ;
+use Alert ;
 
 class StudentsController extends Controller
 {
