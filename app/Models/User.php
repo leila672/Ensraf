@@ -14,6 +14,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\Models\Media;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements HasMedia
 {
@@ -21,6 +22,7 @@ class User extends Authenticatable implements HasMedia
     use Notifiable;
     use HasMediaTrait;
     use Auditable;
+    use HasApiTokens;
 
     public $table = 'users';
 

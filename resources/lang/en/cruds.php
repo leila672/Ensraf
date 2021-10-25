@@ -151,6 +151,9 @@ return [
             'user_helper'          => ' ',
         ],
     ],
+    'screen' => [
+        'title' => 'Screen Show',
+    ],
     'student' => [
         'title'          => 'Students',
         'title_singular' => 'Student',

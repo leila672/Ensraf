@@ -16,9 +16,11 @@
         "guzzlehttp/guzzle": "^6.3",
         "laravel/dusk": "^5.9",
         "laravel/framework": "^7.0",
+        "laravel/sanctum": "^2.8",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
         "laraveldaily/laravel-charts": "^0.1.14",
+        "pusher/pusher-php-server": "~4.0",
         "realrashid/sweet-alert": "^4.0",
         "spatie/laravel-medialibrary": "^7.19",
         "yajra/laravel-datatables-oracle": "^9.9"

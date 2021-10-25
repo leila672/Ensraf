@@ -151,6 +151,9 @@ return [
             'user_helper'          => ' ',
         ],
     ],
+    'screen' => [
+        'title' => 'شاشة العرض',
+    ],
     'student' => [
         'title'          => 'الطالبات',
         'title_singular' => 'طالبة',

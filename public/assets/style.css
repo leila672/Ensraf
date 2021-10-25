@@ -1,0 +1,98 @@
+body,html {
+ padding: 0px;
+ margin: 0px;
+ direction: rtl;
+}
+html{
+ background-color: #101922;
+}
+h1,h2,h3,h4,h5,h6,p,div, li, a{
+ font-family:"Tajawal", Sans-serif ;
+}
+.main-container{
+    width: 100%;
+    overflow: hidden;
+    height: auto;
+ background-color: #101922;
+}
+a{
+    text-decoration: none;
+}
+ul{
+    list-style-type: none;
+    padding: 0px;
+}
+ .clearfix {
+    clear: both;
+}
+.names-container{
+    padding-top:40px;
+    padding-bottom:40px;
+}
+
+.students-div{
+    display: flex;
+}
+.grade{
+background-color: #050f19;
+color: #fff;
+border-radius: 5px;
+    padding: 8px;
+    text-align: center;
+    max-width: 98%;
+}
+
+.names-list{
+    padding: 0px;
+}
+
+.names-list li{
+    color: #fff;
+    font-weight: 600;
+}
+p.bullet {
+    color: #fff;
+    font-weight: 600;
+    background-color: #050f19;
+    padding: 2px 10px;
+    border-radius: 8px;
+    max-width: 30px;
+    max-height: 30px;
+    margin: 0px;
+    margin-left: 10px;
+
+}
+.name{
+      display: flex;
+/*max-height: 30px;*/
+    margin: 10px 0px;
+}
+.col-lg-6.names-col {
+    width: 50%;
+}
+
+
+
+/*****************Responsive************************/
+@media (max-width: 1025px){
+    
+    .col-lg-4.names-wrap {
+    width: 50%;
+}
+}
+
+@media (max-width: 767px){
+    
+    .col-lg-4.names-wrap {
+    width: 100%;
+}
+}
+@media (max-width: 445px){
+    
+.students-div {
+    flex-direction: column;
+}
+.col-lg-6.names-col {
+    width: 100%;
+}
+}

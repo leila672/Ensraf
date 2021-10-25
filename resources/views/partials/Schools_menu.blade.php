@@ -26,6 +26,15 @@
         </li>
 
         <li class="c-sidebar-nav-item">
+            <a href="{{ route("schools.screens.index") }}" class="c-sidebar-nav-link">
+                <i class="fa-fw fas fa-user-graduate c-sidebar-nav-icon">
+
+                </i>
+                {{ trans('cruds.screen.title') }}
+            </a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
             <a href="#" class="c-sidebar-nav-link" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">
                 <i class="c-sidebar-nav-icon fas fa-fw fa-sign-out-alt">
 
