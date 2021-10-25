@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
+use Alert ;
 
 class StudentsController extends Controller
 {
@@ -133,6 +134,7 @@ class StudentsController extends Controller
             Media::whereIn('id', $media)->update(['model_id' => $student->id]);
         }
 
+        Alert::success(trans('global.flash.success'), trans('global.flash.created'));
         return redirect()->route('schools.students.index');
     }
 
@@ -173,7 +175,7 @@ class StudentsController extends Controller
             'phone' => $request->phone,
             'city' => $request->city,
             'email' => $request->email,
-            'password' => $request->password == null ? $user->password : bcrypt($request->password), 
+            'password' => $request->password == null ? $user->password : bcrypt($request->password),
             'phone' => $request->phone,
             'user_type' => 'student',
         ]);
@@ -194,6 +196,7 @@ class StudentsController extends Controller
             }
         }
 
+        Alert::success(trans('global.flash.success'), trans('global.flash.updated'));
         return redirect()->route('schools.students.index');
     }
 
@@ -212,6 +215,7 @@ class StudentsController extends Controller
 
         $student->delete();
 
+        Alert::success(trans('global.flash.success'), trans('global.flash.deleted'));
         return back();
     }
 
