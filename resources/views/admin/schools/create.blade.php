@@ -9,7 +9,7 @@
         <div class="card-body">
             <form method="POST" action="{{ route('admin.schools.store') }}" enctype="multipart/form-data">
                 @csrf
-                <p style="text-align: center ; color: rgb(187, 42, 42) ; font-size: 25px">بيانات مدير المدرسة</p>
+                <p style="text-align: center ; color: rgb(187, 42, 42) ; font-size: 25px"> {{ trans('cruds.user.manager_info') }} </p>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -97,7 +97,7 @@
                     </div>
                 </div>
 
-                <p style="text-align: center ; color: rgb(187, 42, 42) ; font-size: 25px">بيانات المدرسة</p>
+                <p style="text-align: center ; color: rgb(187, 42, 42) ; font-size: 25px"> {{ trans('cruds.user.school_info') }}</p>
                 <div class="row">
                     <div class="form-group col-md-4">
                         <label class="required" for="city">{{ trans('cruds.school.fields.city') }}</label>

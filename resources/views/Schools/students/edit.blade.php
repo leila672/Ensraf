@@ -109,7 +109,7 @@
                     </div>
                 @endif
                 <span class="help-block">{{ trans('cruds.student.fields.number_helper') }}</span>
-            </div> 
+            </div>
             <div class="form-group">
                 <label class="required">{{ trans('cruds.student.fields.academic_level') }}</label>
                 <select class="form-control {{ $errors->has('academic_level') ? 'is-invalid' : '' }}" name="academic_level" id="academic_level" required>
@@ -270,5 +270,18 @@ Dropzone.options.identittyPhotoDropzone = {
          return _results
      }
 }
+        $("#relative_relation").change(function() {
+            if ($(this).val() == "driver") {
+                $("#company_name").prop('disabled', false);
+                $("#license_number").prop('disabled', false);
+            } else {
+                $("#company_name").prop('disabled', true);
+                $("#license_number").prop('disabled', true);
+
+
+            }
+        });
+
 </script>
+
 @endsection

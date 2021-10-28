@@ -74,6 +74,8 @@ return [
             'last_name'                => ' الاسم الثاني',
             'last_name_helper'         => ' ',
         ],
+        'manager_info'  => 'بيانات مدير المدرسة',
+        'school_info'  => 'بيانات المدرسة',
     ],
     'userAlert' => [
         'title'          => 'إشعارات المستخدم',

@@ -282,5 +282,18 @@ Dropzone.options.identittyPhotoDropzone = {
          return _results
      }
 }
+
+
+        $("#relative_relation").change(function() {
+            if ($(this).val() == "driver") {
+                $("#company_name").prop('disabled', false);
+                $("#license_number").prop('disabled', false);
+            } else {
+                $("#company_name").prop('disabled', true);
+                $("#license_number").prop('disabled', true);
+
+
+            }
+        });
 </script>
 @endsection

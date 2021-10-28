@@ -74,6 +74,8 @@ return [
             'last_name'                => 'Last name',
             'last_name_helper'         => ' ',
         ],
+        'manager_info'  => 'School Manager Information',
+        'school_info'  => ' School Information',
     ],
     'userAlert' => [
         'title'          => 'User Alerts',
@@ -150,6 +152,7 @@ return [
             'user'                 => 'User',
             'user_helper'          => ' ',
         ],
+
     ],
     'screen' => [
         'title' => 'Screen Show',
