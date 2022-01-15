@@ -9,7 +9,8 @@
         <div class="card-body">
             <form method="POST" action="{{ route('admin.schools.store') }}" enctype="multipart/form-data">
                 @csrf
-                <p style="text-align: center ; color: rgb(187, 42, 42) ; font-size: 25px"> {{ trans('cruds.user.manager_info') }} </p>
+                <p style="text-align: center ; color: rgb(187, 42, 42) ; font-size: 25px">
+                    {{ trans('cruds.user.manager_info') }} </p>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
@@ -69,7 +70,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="required" for="phone">{{ trans('cruds.user.fields.phone') }}</label>
                             <input class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" type="text"
@@ -82,27 +83,76 @@
                             <span class="help-block">{{ trans('cruds.user.fields.phone_helper') }}</span>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
-                            <label class="required" for="city">{{ trans('cruds.user.fields.city') }}</label>
-                            <input class="form-control {{ $errors->has('city') ? 'is-invalid' : '' }}" type="text"
-                                name="city" id="city" value="{{ old('city', '') }}" required>
-                            @if ($errors->has('city'))
+                            <label class="required"
+                                for="city_manager">{{ trans('cruds.school.fields.city_manager') }}</label>
+                            <select class="form-control select2 {{ $errors->has('city_manager') ? 'is-invalid' : '' }}"
+                                name="city_manager" id="city_manager" required>
+                                @foreach ($cities as $id => $entry)
+                                    <option value="{{ $id }}"
+                                        {{ old('city_manager') == $id ? 'selected' : '' }}>{{ $entry }}</option>
+                                @endforeach
+                            </select>
+                            @if ($errors->has('city_manager'))
                                 <div class="invalid-feedback">
-                                    {{ $errors->first('city') }}
+                                    {{ $errors->first('city_manager') }}
                                 </div>
                             @endif
-                            <span class="help-block">{{ trans('cruds.user.fields.city_helper') }}</span>
+                            <span class="help-block">{{ trans('cruds.school.fields.city_manager_helper') }}</span>
                         </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="required"
+                            for="identity_num">{{ trans('cruds.user.fields.identity_num') }}</label>
+                        <input class="form-control {{ $errors->has('identity_num') ? 'is-invalid' : '' }}" type="number"
+                            name="identity_num" id="identity_num" value="{{ old('identity_num', '') }}" step="1"
+                            required>
+                        @if ($errors->has('identity_num'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('identity_num') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.user.fields.identity_num_helper') }}</span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="photo">{{ trans('cruds.user.fields.photo') }}</label>
+                        <div class="needsclick dropzone {{ $errors->has('photo') ? 'is-invalid' : '' }}"
+                            id="photo-dropzone">
+                        </div>
+                        @if ($errors->has('photo'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('photo') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.user.fields.photo_helper') }}</span>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="identity_photo">{{ trans('cruds.user.fields.identity_photo') }}</label>
+                        <div class="needsclick dropzone {{ $errors->has('identity_photo') ? 'is-invalid' : '' }}"
+                            id="identity_photo-dropzone">
+                        </div>
+                        @if ($errors->has('identity_photo'))
+                            <div class="invalid-feedback">
+                                {{ $errors->first('identity_photo') }}
+                            </div>
+                        @endif
+                        <span class="help-block">{{ trans('cruds.user.fields.identity_photo_helper') }}</span>
                     </div>
                 </div>
 
-                <p style="text-align: center ; color: rgb(187, 42, 42) ; font-size: 25px"> {{ trans('cruds.user.school_info') }}</p>
+                <p style="text-align: center ; color: rgb(187, 42, 42) ; font-size: 25px">
+                    {{ trans('cruds.user.school_info') }}</p>
                 <div class="row">
                     <div class="form-group col-md-4">
-                        <label class="required" for="city">{{ trans('cruds.school.fields.city') }}</label>
-                        <input class="form-control {{ $errors->has('city') ? 'is-invalid' : '' }}" type="text" name="city"
-                            id="city" value="{{ old('city', '') }}" required>
+                        <label class="required" for="city_id">{{ trans('cruds.school.fields.city') }}</label>
+                        <select class="form-control select2 {{ $errors->has('city') ? 'is-invalid' : '' }}"
+                            name="city_id" id="city_id" required>
+                            @foreach ($cities as $id => $entry)
+                                <option value="{{ $id }}" {{ old('city_id') == $id ? 'selected' : '' }}>
+                                    {{ $entry }}</option>
+                            @endforeach
+                        </select>
                         @if ($errors->has('city'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('city') }}
@@ -112,8 +162,8 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label class="required" for="area">{{ trans('cruds.school.fields.area') }}</label>
-                        <input class="form-control {{ $errors->has('area') ? 'is-invalid' : '' }}" type="text" name="area"
-                            id="area" value="{{ old('area', '') }}" required>
+                        <input class="form-control {{ $errors->has('area') ? 'is-invalid' : '' }}" type="text"
+                            name="area" id="area" value="{{ old('area', '') }}" required>
                         @if ($errors->has('area'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('area') }}
@@ -134,8 +184,8 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label class="required" for="name">{{ trans('cruds.school.fields.name') }}</label>
-                        <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text" name="name"
-                            id="name" value="{{ old('name', '') }}" required>
+                        <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text"
+                            name="name" id="name" value="{{ old('name', '') }}" required>
                         @if ($errors->has('name'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('name') }}
@@ -178,7 +228,8 @@
                         <span class="help-block">{{ trans('cruds.school.fields.latitude_helper') }}</span>
                     </div>
                     <div class="form-group col-md-4">
-                        <label class="required" for="start_time">{{ trans('cruds.school.fields.start_time') }}</label>
+                        <label class="required"
+                            for="start_time">{{ trans('cruds.school.fields.start_time') }}</label>
                         <input class="form-control timepicker {{ $errors->has('start_time') ? 'is-invalid' : '' }}"
                             type="text" name="start_time" id="start_time" value="{{ old('start_time') }}" required>
                         @if ($errors->has('start_time'))
@@ -191,8 +242,8 @@
 
                     <div class="form-group col-md-4">
                         <label class="required" for="end_time">{{ trans('cruds.school.fields.end_time') }}</label>
-                        <input class="form-control timepicker {{ $errors->has('end_time') ? 'is-invalid' : '' }}" type="text"
-                            name="end_time" id="end_time" value="{{ old('end_time') }}" required>
+                        <input class="form-control timepicker {{ $errors->has('end_time') ? 'is-invalid' : '' }}"
+                            type="text" name="end_time" id="end_time" value="{{ old('end_time') }}" required>
                         @if ($errors->has('end_time'))
                             <div class="invalid-feedback">
                                 {{ $errors->first('end_time') }}
@@ -213,4 +264,121 @@
 
 
 
+@endsection
+
+@section('scripts')
+    <script>
+        Dropzone.options.photoDropzone = {
+            url: '{{ route('admin.users.storeMedia') }}',
+            maxFilesize: 2, // MB
+            acceptedFiles: '.jpeg,.jpg,.png,.gif',
+            maxFiles: 1,
+            addRemoveLinks: true,
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            params: {
+                size: 2,
+                width: 4096,
+                height: 4096
+            },
+            success: function(file, response) {
+                $('form').find('input[name="photo"]').remove()
+                $('form').append('<input type="hidden" name="photo" value="' + response.name + '">')
+            },
+            removedfile: function(file) {
+                file.previewElement.remove()
+                if (file.status !== 'error') {
+                    $('form').find('input[name="photo"]').remove()
+                    this.options.maxFiles = this.options.maxFiles + 1
+                }
+            },
+            init: function() {
+                @if (isset($school->user) && $school->user->photo)
+                    var file = {!! json_encode($school->user->photo) !!}
+                    this.options.addedfile.call(this, file)
+                    this.options.thumbnail.call(this, file, file.preview)
+                    file.previewElement.classList.add('dz-complete')
+                    $('form').append('<input type="hidden" name="photo" value="' + file.file_name + '">')
+                    this.options.maxFiles = this.options.maxFiles - 1
+                @endif
+            },
+            error: function(file, response) {
+                if ($.type(response) === 'string') {
+                    var message = response //dropzone sends it's own error messages in string
+                } else {
+                    var message = response.errors.file
+                }
+                file.previewElement.classList.add('dz-error')
+                _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+                _results = []
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    node = _ref[_i]
+                    _results.push(node.textContent = message)
+                }
+
+                return _results
+            }
+        }
+    </script>
+    <script>
+        var uploadedIdentityPhotoMap = {}
+        Dropzone.options.identityPhotoDropzone = {
+            url: '{{ route('admin.users.storeMedia') }}',
+            maxFilesize: 2, // MB
+            acceptedFiles: '.jpeg,.jpg,.png,.gif',
+            addRemoveLinks: true,
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            params: {
+                size: 2,
+                width: 4096,
+                height: 4096
+            },
+            success: function(file, response) {
+                $('form').append('<input type="hidden" name="identity_photo[]" value="' + response.name + '">')
+                uploadedIdentityPhotoMap[file.name] = response.name
+            },
+            removedfile: function(file) {
+                console.log(file)
+                file.previewElement.remove()
+                var name = ''
+                if (typeof file.file_name !== 'undefined') {
+                    name = file.file_name
+                } else {
+                    name = uploadedIdentityPhotoMap[file.name]
+                }
+                $('form').find('input[name="identity_photo[]"][value="' + name + '"]').remove()
+            },
+            init: function() {
+                @if (isset($school->user) && $school->user->identity_photo)
+                    var files = {!! json_encode($school->user->identity_photo) !!}
+                    for (var i in files) {
+                    var file = files[i]
+                    this.options.addedfile.call(this, file)
+                    this.options.thumbnail.call(this, file, file.preview)
+                    file.previewElement.classList.add('dz-complete')
+                    $('form').append('<input type="hidden" name="identity_photo[]" value="' + file.file_name + '">')
+                    }
+                @endif
+            },
+            error: function(file, response) {
+                if ($.type(response) === 'string') {
+                    var message = response //dropzone sends it's own error messages in string
+                } else {
+                    var message = response.errors.file
+                }
+                file.previewElement.classList.add('dz-error')
+                _ref = file.previewElement.querySelectorAll('[data-dz-errormessage]')
+                _results = []
+                for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+                    node = _ref[_i]
+                    _results.push(node.textContent = message)
+                }
+
+                return _results
+            }
+        }
+    </script>
 @endsection

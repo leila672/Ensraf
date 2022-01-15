@@ -126,6 +126,11 @@
 
         </div>
     </div>
+    
+    <audio controls>
+        <source id="source" src="{{ asset('welcome.mp3') }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
     <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script>
@@ -154,6 +159,25 @@
                 $('#grade'+obj['academic_level']+'-col1').prepend(ul);
             }
 
+            var repeat = 0;
+
+            $('audio #source').attr('src', obj['voice']);
+
+            repeat++;
+            
+            if($('audio').get(0).paused){ 
+                $('audio').get(0).load();
+                $('audio').get(0).play(); 
+            }else{  
+                $('audio').on("ended", function() {  
+                    if(repeat > 0){
+                        $('audio').get(0).load();
+                        $('audio').get(0).play(); 
+                        repeat--;
+                    } 
+                });   
+            } 
+            
             setTimeout(function(){ 
                 $('#'+ obj['student_id']).fadeOut(300, function(){ $(this).remove();});
             }, 5000);

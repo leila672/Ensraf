@@ -24,6 +24,7 @@ class CallStudent implements ShouldBroadcast
     public $academic_level;
     public $class_number;
     public $name;
+    public $voice;
 
     public function __construct($data)
     {
@@ -32,6 +33,7 @@ class CallStudent implements ShouldBroadcast
         $this->academic_level = $data['academic_level'];
         $this->class_number = $data['class_number'];
         $this->name = $data['name'];
+        $this->voice = $data['voice'];
     }
 
     /**

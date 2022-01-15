@@ -29,10 +29,7 @@
                     </th>
                     <th>
                         {{ trans('cruds.user.fields.last_name') }}
-                    </th>
-                    <th>
-                        {{ trans('cruds.user.fields.email') }}
-                    </th>
+                    </th> 
                     <th>
                         {{ trans('cruds.student.fields.number') }}
                     </th>
@@ -44,11 +41,7 @@
                     </th>
                     <th>
                         {{ trans('cruds.student.fields.class_number') }}
-                    </th>
-
-                    <th>
-                        {{ trans('cruds.student.fields.relative_relation') }}
-                    </th>
+                    </th> 
 
 
                     <th>
@@ -109,13 +102,11 @@
       { data: 'placeholder', name: 'placeholder' },
 { data: 'id', name: 'id' },
 { data: 'user.name', name: 'user.name' },
-{ data: 'user.last_name', name: 'user.last_name' },
-{ data: 'user.email', name: 'user.email' },
+{ data: 'user.last_name', name: 'user.last_name' }, 
 { data: 'number', name: 'number' },
 { data: 'school_name', name: 'school.name' },
 { data: 'academic_level', name: 'academic_level' },
-{ data: 'class_number', name: 'class_number' },
-{ data: 'relative_relation', name: 'relative_relation' },
+{ data: 'class_number', name: 'class_number' }, 
 { data: 'actions', name: '{{ trans('global.actions') }}' }
     ],
     orderCellsTop: true,

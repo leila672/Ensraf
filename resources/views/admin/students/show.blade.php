@@ -46,34 +46,34 @@
                         <td>
                             {{ App\Models\Student::ACADEMIC_LEVEL_SELECT[$student->academic_level] ?? '' }}
                         </td>
-                    </tr>
+                    </tr>  
                     <tr>
                         <th>
-                            {{ trans('cruds.student.fields.relative_relation') }}
+                            {{ trans('cruds.student.fields.class_number') }}
                         </th>
                         <td>
-                            {{ App\Models\Student::RELATIVE_RELATION_SELECT[$student->relative_relation] ?? '' }}
+                            {{ App\Models\Student::CLASS_NUMBER_SELECT[$student->class_number] ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.student.fields.company_name') }}
+                            {{ trans('cruds.user.fields.name') }}
                         </th>
                         <td>
-                            {{ $student->company_name ?? '' }}
+                            {{ $student->user->name ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.student.fields.license_number') }}
+                            {{ trans('cruds.user.fields.last_name') }}
                         </th>
                         <td>
-                            {{ $student->license_number ?? '' }}
+                            {{ $student->user->last_name ?? '' }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.student.fields.user') }}
+                            {{ trans('cruds.user.fields.email') }}
                         </th>
                         <td>
                             {{ $student->user->email ?? '' }}
@@ -81,18 +81,54 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.student.fields.identity_num') }}
+                            {{ trans('cruds.user.fields.phone') }}
                         </th>
                         <td>
-                            {{ $student->identity_num }}
+                            {{ $student->user->phone }}
                         </td>
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.student.fields.identitty_photo') }}
+                            {{ trans('cruds.user.fields.city') }}
                         </th>
                         <td>
-                            @foreach($student->identitty_photo as $key => $media)
+                            {{ $student->user->city->name_ar ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.identity_num') }}
+                        </th>
+                        <td>
+                            {{ $student->user->identity_num }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.student.fields.parent_identity') }}
+                        </th>
+                        <td>
+                            {{ $student->parent_identity }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.photo') }}
+                        </th>
+                        <td>
+                            @if($student->user && $student->user->photo)
+                                <a href="{{ $student->user->photo->getUrl() }}" target="_blank" style="display: inline-block">
+                                    <img src="{{ $student->user->photo->getUrl('thumb') }}">
+                                </a>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.identity_photo') }}
+                        </th>
+                        <td>
+                            @foreach($student->user->identity_photo as $key => $media)
                                 <a href="{{ $media->getUrl() }}" target="_blank" style="display: inline-block">
                                     <img src="{{ $media->getUrl('thumb') }}">
                                 </a>
@@ -101,10 +137,14 @@
                     </tr>
                     <tr>
                         <th>
-                            {{ trans('cruds.student.fields.class_number') }}
+                            {{ trans('cruds.student.fields.voice') }}
                         </th>
                         <td>
-                            {{ App\Models\Student::CLASS_NUMBER_SELECT[$student->class_number] ?? '' }}
+                            @if($student->voice)
+                                <a href="{{ $student->voice->getUrl() }}" target="_blank">
+                                    {{ trans('global.view_file') }}
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 </tbody>

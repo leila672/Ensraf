@@ -26,6 +26,15 @@
         </li>
 
         <li class="c-sidebar-nav-item">
+            <a href="{{ route("schools.my-parents.index") }}" class="c-sidebar-nav-link {{ request()->is("schools/my-parents") || request()->is("schools/my-parents/*") ? "c-active" : "" }}">
+                <i class="fa-fw fas fa-male c-sidebar-nav-icon">
+
+                </i>
+                {{ trans('cruds.myParent.title') }}
+            </a>
+        </li>
+
+        <li class="c-sidebar-nav-item">
             <a href="{{ route("schools.screens.index") }}" class="c-sidebar-nav-link">
                 <i class="fa-fw fas fa-user-graduate c-sidebar-nav-icon">
 

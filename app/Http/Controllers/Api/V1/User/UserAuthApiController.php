@@ -7,13 +7,17 @@ use Illuminate\Http\Request;
 use App\Traits\api_return;
 use App\Models\User;
 use App\Models\Student;
+use App\Models\MyParent;
 use Validator;
-use Auth; 
+use Auth;  
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Traits\MediaUploadingTrait; 
 
 
 class UserAuthApiController extends Controller
 { 
-    use api_return; 
+    use api_return;  
+    use MediaUploadingTrait;
 
     public function register(Request $request){
 
@@ -21,30 +25,31 @@ class UserAuthApiController extends Controller
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'email' => 'required|unique:users',
-            'password' => 'required|min:6|max:20',
-            'city_id' => 'required',
-            'gender' => 'required',
-            'phone' => 'required',
-            'nationality_id' => 'required',
-            'identity_num' => 'required',
-            'description' => 'required',
-            'specializations' => 'required|array',
-            'specializations.*' => 'integer',
-            'date_of_birth' =>
-                'required|date_format:' . config('panel.date_format'),
-        ];
-
+            'password' => 'required', 
+            'phone' => 'required|string',
+            'identity_num' => 'required|integer|unique:users',
+            'city_id' => 'required|integer',
+            'relative_relation' => 'required|in:father,brother,driver', 
+        ];   
+        
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             return $this->returnError('401', $validator->errors());
         }  
 
-        $validated_requests = $request->all();
-        $validated_requests['password'] = bcrypt($request->password);
-        $validated_requests['user_type'] = 'cader';
-        $validated_requests['approved'] = 0;
-        $user = User::create($validated_requests);
+        $user = User::create([
+            'name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'city_id' => $request->city_id,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'phone' => $request->phone,
+            'identity_num' => $request->identity_num,
+            'user_type' => 'parent', 
+        ]);
+
         if (request()->hasFile('photo') && request('photo') != ''){
             $validator = Validator::make($request->all(), [
                 'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
@@ -55,12 +60,32 @@ class UserAuthApiController extends Controller
 
             $user->addMedia(request('photo'))->toMediaCollection('photo'); 
         }
-        $cader = Cader::create([
-            'user_id' => $user->id,
-            'description' => $validated_requests['description'],
-        ]);
+        
+        if (request()->hasFile('identity_photo') && request('identity_photo') != ''){
+            $validator = Validator::make($request->all(), [
+                'identity_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+            if ($validator->fails()) {
+                return $this->returnError('401', $validator->errors());
+            } 
 
-        $cader->specializations()->sync($request->input('specializations', [])); 
+            $user->addMedia(request('identity_photo'))->toMediaCollection('identity_photo'); 
+        }
+
+        $myParent = MyParent::create([
+            'relative_relation'=>$request->relative_relation,
+            'company_name'=>$request->company_name, 
+            'license_number'=>$request->license_number, 
+            'user_id'=>$user->id, 
+        ]);
+        
+
+        $students = Student::where('parent_identity',$request->identity_num)->get();
+
+        foreach($students as $student){
+            $student->parent_id = $myParent->id;
+            $student->save();
+        }
 
         $token = $user->createToken('user_token')->plainTextToken;
 
@@ -71,10 +96,7 @@ class UserAuthApiController extends Controller
             ]
         );
 
-    }
-
-    // -----------------------------------------------------------------------------------
-    // -----------------------------------------------------------------------------------
+    } 
 
     public function login(Request $request){
 
@@ -90,7 +112,7 @@ class UserAuthApiController extends Controller
         }
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            if(Auth::user()->user_type == 'student'){
+            if(Auth::user()->user_type == 'parent'){
                 $token = Auth::user()->createToken('user_token')->plainTextToken; 
                 return $this->returnData(
                     [

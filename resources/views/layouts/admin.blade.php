@@ -22,6 +22,19 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/min/dropzone.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/1.5.0/css/perfect-scrollbar.min.css" rel="stylesheet" />
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
+    @if(app()->getLocale() == 'ar')
+      <style>
+        .c-sidebar-nav .c-sidebar-nav-dropdown-items{
+          padding-right: 8%; 
+        }
+      </style>
+    @else
+      <style>
+        .c-sidebar-nav .c-sidebar-nav-dropdown-items{
+          padding-left: 8%; 
+        }
+      </style>
+    @endif
     @yield('styles')
 </head>
 

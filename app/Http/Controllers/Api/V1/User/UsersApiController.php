@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\V1\User;
 
-use App\Http\Controllers\Controller;
-use App\Models\Emergency;
+use App\Http\Controllers\Controller; 
 use App\Models\User;
 use App\Models\City;
-use App\Models\Cader;
+use App\Models\Student;
+use App\Models\MyParent;
 use Illuminate\Http\Request;
 use Auth;
 use App\Http\Resources\V1\User\UserResource;
@@ -18,18 +18,25 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 class UsersApiController extends Controller
 {
     use api_return;  
-    use MediaUploadingTrait;
+    use MediaUploadingTrait; 
 
     public function profile()
     {  
-        return $this->returnData(new UserResource(Auth::user()), "success"); 
+        $myParent = MyParent::where('user_id',Auth::id())->first();
+        return $this->returnData(new UserResource($myParent), "success"); 
     }
 
     public function update(Request $request){
 
         $rules = [
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
             'email' => 'required|unique:users,email,'.Auth::id(),
-            'date_of_birth' =>'date_format:' . config('panel.date_format'),
+            'password' => 'required', 
+            'phone' => 'required|string',
+            'identity_num' => 'required|integer|unique:users,identity_num,'.Auth::id(),
+            'city_id' => 'required|integer',
+            'relative_relation' => 'required|in:father,brother,driver', 
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -39,6 +46,24 @@ class UsersApiController extends Controller
         }
 
         $user = Auth::user();
+
+        $myParent = MyParent::where('user_id',Auth::id())->first();
+
+        if(!$user)
+            return $this->returnError('404',('Not Found !!!')); 
+
+        if(!$myParent)
+            return $this->returnError('404',('Not Found !!!')); 
+
+        $user->update([ 
+            'name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'phone' => $request->phone,
+            'city_id' => $request->city_id,
+            'email' => $request->email, 
+            'phone' => $request->phone,
+            'identity_num' => $request->identity_num, 
+        ]);
 
         if (request()->hasFile('photo') && request('photo') != '' && request('photo') != $user->photo){
             $validator = Validator::make($request->all(), [
@@ -50,16 +75,24 @@ class UsersApiController extends Controller
             $user->addMedia(request('photo'))->toMediaCollection('photo'); 
         }
 
-        if(!$user)
-            return $this->returnError('404',('Not Found !!!'));
+        if (request()->hasFile('identity_photo') && request('identity_photo') != ''){
+            $validator = Validator::make($request->all(), [
+                'identity_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+            if ($validator->fails()) {
+                return $this->returnError('401', $validator->errors());
+            } 
 
-        $user->update($request->all());
-        
-        $cader = Cader::where('user_id',$user->id)->first();
-        $cader->description = $request->description;
-        $cader->save();
+            $user->addMedia(request('identity_photo'))->toMediaCollection('identity_photo'); 
+        }
 
-        return $this->returnData(new UserResource($user),__('Profile Updated Successfully'));
+        $myParent->update([ 
+            'relative_relation'=>$request->relative_relation,
+            'company_name'=>$request->company_name, 
+            'license_number'=>$request->license_number, 
+        ]);
+
+        return $this->returnData(new UserResource($myParent),__('Profile Updated Successfully'));
     } 
 
     public function update_password(Request $request){
@@ -106,5 +139,33 @@ class UsersApiController extends Controller
 
 
         return $this->returnSuccessMessage(__('Token Updated Successfully'));
+    }  
+
+    public function update_voice(Request $request){ 
+
+        $rules = [
+            'student_id' => 'required|integer', 
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return $this->returnError('401', $validator->errors());
+        }
+
+        $student = Student::findOrFail($request->student_id); 
+        
+        if (request()->hasFile('voice') && request('voice') != ''){
+            $validator = Validator::make($request->all(), [
+                'voice' => 'required',
+            ]);
+            if ($validator->fails()) {
+                return $this->returnError('401', $validator->errors());
+            } 
+
+            $student->addMedia(request('voice'))->toMediaCollection('voice'); 
+        }
+
+        return $this->returnSuccessMessage(__('Voice Updated Successfully'));
     } 
 }

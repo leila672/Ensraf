@@ -97,6 +97,26 @@
                 </a>
             </li>
         @endcan
+        @can('my_parent_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.my-parents.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/my-parents") || request()->is("admin/my-parents/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-male c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.myParent.title') }}
+                </a>
+            </li>
+        @endcan
+        @can('city_access')
+            <li class="c-sidebar-nav-item">
+                <a href="{{ route("admin.cities.index") }}" class="c-sidebar-nav-link {{ request()->is("admin/cities") || request()->is("admin/cities/*") ? "c-active" : "" }}">
+                    <i class="fa-fw fas fa-globe-africa c-sidebar-nav-icon">
+
+                    </i>
+                    {{ trans('cruds.city.title') }}
+                </a>
+            </li>
+        @endcan
         @if(file_exists(app_path('Http/Controllers/Auth/ChangePasswordController.php')))
             @can('profile_password_edit')
                 <li class="c-sidebar-nav-item">

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MassDestroySchoolRequest;
 use App\Http\Requests\StoreSchoolRequest;
 use App\Http\Requests\UpdateSchoolRequest;
+use App\Models\City;
 use App\Models\School;
 use App\Models\User;
 use Gate;
@@ -19,7 +20,7 @@ class SchoolsController extends Controller
     {
         abort_if(Gate::denies('school_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $schools = School::with(['user'])->get();
+        $schools = School::with(['user', 'city'])->get();
 
         return view('admin.schools.index', compact('schools'));
     }
@@ -30,7 +31,9 @@ class SchoolsController extends Controller
 
         $users = User::pluck('email', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.schools.create', compact('users'));
+        $cities = City::pluck('name_ar', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.schools.create', compact('cities', 'users'));
     }
 
     public function store(StoreSchoolRequest $request)
@@ -38,16 +41,28 @@ class SchoolsController extends Controller
         $user = User::create([
             'name' => $request->name,
             'last_name' => $request->last_name,
-            'phone' => $request->phone,
-            'city' => $request->city,
+            'phone' => $request->phone, 
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'phone' => $request->phone,
+            'identity_num' => $request->identity_num,
+            'city_id' => $request->city_manager,
             'user_type' => 'school',
-
         ]);
+
+        if ($request->input('photo', false)) {
+            $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('photo'))))->toMediaCollection('photo');
+        }
+
+        foreach ($request->input('identity_photo', []) as $file) {
+            $user->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('identity_photo');
+        }
+
+        if ($media = $request->input('ck-media', false)) {
+            Media::whereIn('id', $media)->update(['model_id' => $user->id]);
+        }
+
         $school = School::create([
-            'city' => $request->city,
             'area' => $request->area,
             'sector' => $request->sector,
             'name' => $request->name,
@@ -56,8 +71,8 @@ class SchoolsController extends Controller
             'latitude' => $request->latitude,
             'end_time' => $request->end_time,
             'start_time' => $request->start_time,
-            'user_id'=>$user->id,
-
+            'city_id' => $request->city_id,
+            'user_id'=>$user->id, 
         ]);
 
         Alert::success(trans('global.flash.success'), trans('global.flash.created'));
@@ -70,15 +85,17 @@ class SchoolsController extends Controller
 
         $users = User::pluck('email', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        $school->load('user');
+        $cities = City::pluck('name_ar', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.schools.edit', compact('users', 'school'));
+        $school->load('user', 'city');
+
+        return view('admin.schools.edit', compact('cities', 'school', 'users'));
     }
 
     public function update(UpdateSchoolRequest $request, School $school)
     {
-        $school->update([
-            'city' => $request->city,
+        
+        $school->update([ 
             'area' => $request->area,
             'sector' => $request->sector,
             'name' => $request->name,
@@ -87,21 +104,47 @@ class SchoolsController extends Controller
             'latitude' => $request->latitude,
             'end_time' => $request->end_time,
             'start_time' => $request->start_time,
-
+            'city_id' => $request->city_id,
         ]);
 
-        $user = User::find($school->user_id);
+        $user = User::find($request->user_id);
 
         $user->update([
             'name' => $request->name,
             'last_name' => $request->last_name,
-            'phone' => $request->phone,
-            'city' => $request->city,
+            'phone' => $request->phone, 
             'email' => $request->email,
             'password' => $request->password == null ? $user->password : bcrypt($request->password), 
             'phone' => $request->phone,
+            'city_id' => $request->city_manager,
+            'identity_num' => $request->identity_num,
             'user_type' => 'school',
         ]);
+
+        if ($request->input('photo', false)) {
+            if (!$user->photo || $request->input('photo') !== $user->photo->file_name) {
+                if ($user->photo) {
+                    $user->photo->delete();
+                }
+                $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('photo'))))->toMediaCollection('photo');
+            }
+        } elseif ($user->photo) {
+            $user->photo->delete();
+        }
+
+        if (count($user->identity_photo) > 0) {
+            foreach ($user->identity_photo as $media) {
+                if (!in_array($media->file_name, $request->input('identity_photo', []))) {
+                    $media->delete();
+                }
+            }
+        }
+        $media = $user->identity_photo->pluck('file_name')->toArray();
+        foreach ($request->input('identity_photo', []) as $file) {
+            if (count($media) === 0 || !in_array($file, $media)) {
+                $user->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('identity_photo');
+            }
+        }
 
         Alert::success(trans('global.flash.success'), trans('global.flash.updated'));
         return redirect()->route('admin.schools.index');
@@ -111,7 +154,7 @@ class SchoolsController extends Controller
     {
         abort_if(Gate::denies('school_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $school->load('user', 'schoolStudents');
+        $school->load('user', 'city', 'schoolStudents');
 
         return view('admin.schools.show', compact('school'));
     }

@@ -5,22 +5,16 @@ namespace App\Models;
 use \DateTimeInterface;
 use App\Traits\Auditable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\SoftDeletes; 
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\Models\Media;
 
 class Student extends Model implements HasMedia
 {
-    use SoftDeletes;
+    use SoftDeletes; 
     use HasMediaTrait;
-    use Auditable;
-
-    public const RELATIVE_RELATION_SELECT = [
-        'father'  => 'father',
-        'brother' => 'brother',
-        'driver'  => 'driver',
-    ];
+    use Auditable; 
 
     public const CLASS_NUMBER_SELECT = [
         '1'  => 'class 1',
@@ -41,19 +35,13 @@ class Student extends Model implements HasMedia
         '3'  => 'third grade',
         '4'  => 'fourth grade',
         '5'  => 'Fifth grade',
-        '6'  => 'six grade',
-        '7'  => 'seventh grade',
-        '8'  => 'eight grade',
-        '9'  => 'ninth grade',
-        '10' => 'tenth grade',
-        '11' => 'eleventh grade',
-        '12' => 'twelve grade',
+        '6'  => 'six grade', 
     ];
 
-    public $table = 'students';
+    public $table = 'students';  
 
     protected $appends = [
-        'identitty_photo',
+        'voice',
     ];
 
     protected $dates = [
@@ -64,18 +52,16 @@ class Student extends Model implements HasMedia
 
     protected $fillable = [
         'number',
-        'school_id',
-        'academic_level',
-        'relative_relation',
-        'company_name',
-        'license_number',
-        'user_id',
-        'identity_num',
+        'academic_level',  
         'class_number',
+        'parent_identity',
+        'school_id',
+        'user_id', 
+        'parent_id',
         'created_at',
         'updated_at',
         'deleted_at',
-    ];
+    ]; 
 
     public function registerMediaConversions(Media $media = null)
     {
@@ -91,18 +77,16 @@ class Student extends Model implements HasMedia
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    } 
+    
+    public function parent()
+    {
+        return $this->belongsTo(MyParent::class, 'parent_id');
     }
 
-    public function getIdentittyPhotoAttribute()
+    public function getVoiceAttribute() 
     {
-        $files = $this->getMedia('identitty_photo');
-        $files->each(function ($item) {
-            $item->url = $item->getUrl();
-            $item->thumbnail = $item->getUrl('thumb');
-            $item->preview = $item->getUrl('preview');
-        });
-
-        return $files;
+        return $this->getMedia('voice')->last();
     }
 
     protected function serializeDate(DateTimeInterface $date)

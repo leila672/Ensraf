@@ -16,11 +16,7 @@ class StoreSchoolRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'city' => [
-                'string',
-                'required',
-            ],
+        return [ 
             'area' => [
                 'string',
                 'required',
@@ -50,6 +46,24 @@ class StoreSchoolRequest extends FormRequest
             'start_time' => [
                 'required',
                 'date_format:' . config('panel.time_format'),
+            ],
+            'city_id' => [
+                'required',
+                'integer',
+            ],
+            'city_manager' => [
+                'required',
+                'integer',
+            ],
+            'identity_photo' => [
+                'array',
+            ],
+            'identity_num' => [
+                'required',
+                'unique:users',
+                'integer',
+                'min:-2147483648',
+                'max:2147483647',
             ],
         ];
     }

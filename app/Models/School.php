@@ -20,8 +20,7 @@ class School extends Model
         'deleted_at',
     ];
 
-    protected $fillable = [
-        'city',
+    protected $fillable = [ 
         'area',
         'sector',
         'name',
@@ -31,6 +30,7 @@ class School extends Model
         'end_time',
         'start_time',
         'user_id',
+        'city_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -44,6 +44,11 @@ class School extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
     }
 
     protected function serializeDate(DateTimeInterface $date)

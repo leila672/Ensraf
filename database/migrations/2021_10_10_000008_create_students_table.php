@@ -12,11 +12,8 @@ class CreateStudentsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('number');
             $table->string('academic_level');
-            $table->string('relative_relation');
-            $table->string('company_name')->nullable();
-            $table->integer('license_number')->nullable();
-            $table->string('identity_num');
             $table->string('class_number')->nullable();
+            $table->integer('parent_identity');
             $table->timestamps();
             $table->softDeletes();
         });

@@ -42,10 +42,7 @@
                         </th>
                         <th>
                             {{ trans('cruds.school.fields.start_time') }}
-                        </th>
-                        <th>
-                            {{ trans('cruds.school.fields.user') }}
-                        </th>
+                        </th> 
                         <th>
                             &nbsp;
                         </th>
@@ -61,7 +58,7 @@
                                 {{ $school->id ?? '' }}
                             </td>
                             <td>
-                                {{ $school->city ?? '' }}
+                                {{ $school->city->name_ar ?? '' }}
                             </td>
                             <td>
                                 {{ $school->sector ?? '' }}
@@ -77,10 +74,7 @@
                             </td>
                             <td>
                                 {{ $school->start_time ?? '' }}
-                            </td>
-                            <td>
-                                {{ $school->user->email ?? '' }}
-                            </td>
+                            </td> 
                             <td>
                                 @can('school_show')
                                     <a class="btn btn-xs btn-primary" href="{{ route('admin.schools.show', $school->id) }}">

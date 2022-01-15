@@ -13,6 +13,8 @@ class AddRelationshipFieldsToStudentsTable extends Migration
             $table->foreign('school_id', 'school_fk_5072129')->references('id')->on('schools');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id', 'user_fk_5085800')->references('id')->on('users');
+            $table->unsignedBigInteger('parent_id')->nullable();
+            $table->foreign('parent_id', 'parent_fk_5547572')->references('id')->on('my_parents');
         });
     }
 }

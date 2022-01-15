@@ -1,4 +1,4 @@
-@extends('layouts.Schools')
+@extends('layouts.schools')
 @section('content')
 
 <div class="card">
@@ -9,7 +9,7 @@
     <div class="card-body">
         <div class="form-group">
             <div class="form-group">
-                <a class="btn btn-default" href="{{ route('schools.students.index') }}">
+                <a class="btn btn-default" href="{{ route('admin.students.index') }}">
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>
@@ -30,15 +30,7 @@
                         <td>
                             {{ $student->number }}
                         </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.student.fields.school') }}
-                        </th>
-                        <td>
-                            {{ $student->school->name ?? '' }}
-                        </td>
-                    </tr>
+                    </tr> 
                     <tr>
                         <th>
                             {{ trans('cruds.student.fields.academic_level') }}
@@ -46,59 +38,7 @@
                         <td>
                             {{ App\Models\Student::ACADEMIC_LEVEL_SELECT[$student->academic_level] ?? '' }}
                         </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.student.fields.relative_relation') }}
-                        </th>
-                        <td>
-                            {{ App\Models\Student::RELATIVE_RELATION_SELECT[$student->relative_relation] ?? '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.student.fields.company_name') }}
-                        </th>
-                        <td>
-                            {{ $student->company_name ?? '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.student.fields.license_number') }}
-                        </th>
-                        <td>
-                            {{ $student->license_number ?? '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.student.fields.user') }}
-                        </th>
-                        <td>
-                            {{ $student->user->email ?? '' }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.student.fields.identity_num') }}
-                        </th>
-                        <td>
-                            {{ $student->identity_num }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {{ trans('cruds.student.fields.identitty_photo') }}
-                        </th>
-                        <td>
-                            @foreach($student->identitty_photo as $key => $media)
-                                <a href="{{ $media->getUrl() }}" target="_blank" style="display: inline-block">
-                                    <img src="{{ $media->getUrl('thumb') }}">
-                                </a>
-                            @endforeach
-                        </td>
-                    </tr>
+                    </tr>  
                     <tr>
                         <th>
                             {{ trans('cruds.student.fields.class_number') }}
@@ -107,10 +47,102 @@
                             {{ App\Models\Student::CLASS_NUMBER_SELECT[$student->class_number] ?? '' }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.name') }}
+                        </th>
+                        <td>
+                            {{ $student->user->name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.last_name') }}
+                        </th>
+                        <td>
+                            {{ $student->user->last_name ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.email') }}
+                        </th>
+                        <td>
+                            {{ $student->user->email ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.phone') }}
+                        </th>
+                        <td>
+                            {{ $student->user->phone }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.city') }}
+                        </th>
+                        <td>
+                            {{ $student->user->city->name_ar ?? '' }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.identity_num') }}
+                        </th>
+                        <td>
+                            {{ $student->user->identity_num }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.student.fields.parent_identity') }}
+                        </th>
+                        <td>
+                            {{ $student->parent_identity }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.photo') }}
+                        </th>
+                        <td>
+                            @if($student->user && $student->user->photo)
+                                <a href="{{ $student->user->photo->getUrl() }}" target="_blank" style="display: inline-block">
+                                    <img src="{{ $student->user->photo->getUrl('thumb') }}">
+                                </a>
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.identity_photo') }}
+                        </th>
+                        <td>
+                            @foreach($student->user->identity_photo as $key => $media)
+                                <a href="{{ $media->getUrl() }}" target="_blank" style="display: inline-block">
+                                    <img src="{{ $media->getUrl('thumb') }}">
+                                </a>
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.student.fields.voice') }}
+                        </th>
+                        <td>
+                            @if($student->voice)
+                                <a href="{{ $student->voice->getUrl() }}" target="_blank">
+                                    {{ trans('global.view_file') }}
+                                </a>
+                            @endif
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="form-group">
-                <a class="btn btn-default" href="{{ route('schools.students.index') }}">
+                <a class="btn btn-default" href="{{ route('admin.students.index') }}">
                     {{ trans('global.back_to_list') }}
                 </a>
             </div>

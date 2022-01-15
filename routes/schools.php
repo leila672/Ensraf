@@ -10,6 +10,10 @@ Route::group(['prefix' => 'schools', 'as' => 'schools.', 'namespace' => 'Schools
     Route::post('students/ckmedia', 'StudentsController@storeCKEditorImages')->name('students.storeCKEditorImages');
     Route::resource('students', 'StudentsController');
 
+    // My Parents
+    Route::delete('my-parents/destroy', 'MyParentsController@massDestroy')->name('my-parents.massDestroy');
+    Route::resource('my-parents', 'MyParentsController');
+    
     //screens
     Route::get('screen','ScreensController@index')->name('screens.index');
 });

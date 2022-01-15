@@ -17,6 +17,36 @@ class UpdateStudentRequest extends FormRequest
     public function rules()
     {
         return [
+            'email' => [
+                'required',
+                'unique:users,email,' . request()->user_id,
+            ], 
+            'name' => [
+                'string',
+                'required',
+            ],
+            'last_name' => [
+                'string',
+                'required',
+            ],  
+            'phone' => [
+                'string',
+                'required',
+            ],
+            'identity_photo' => [
+                'array',
+            ],
+            'identity_num' => [
+                'required',
+                'unique:users',
+                'integer',
+                'min:-2147483648',
+                'max:2147483647',
+            ],
+            'city_id' => [
+                'required',
+                'integer',
+            ],
             'number' => [
                 'required',
                 'integer',
@@ -29,30 +59,25 @@ class UpdateStudentRequest extends FormRequest
             ],
             'academic_level' => [
                 'required',
-            ],
-            'relative_relation' => [
-                'required',
-            ],
-            'company_name' => [
-                'string',
-                'nullable',
-            ],
-            'license_number' => [
-                'nullable',
+            ], 
+            'identity_num' => [
+                'required', 
                 'integer',
+                'unique:users,identity_num,' . request()->user_id,
                 'min:-2147483648',
                 'max:2147483647',
             ],
-
-            'identity_num' => [
-                'string',
-                'required',
+            'parent_identity' => [
+                'required', 
+                'integer', 
+                'min:-2147483648',
+                'max:2147483647',
             ],
-            'identitty_photo' => [
+            'identity_photo' => [
                 'array',
                 'required',
             ],
-            'identitty_photo.*' => [
+            'identity_photo.*' => [
                 'required',
             ],
         ];

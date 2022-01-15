@@ -17,6 +17,25 @@ class StoreStudentRequest extends FormRequest
     public function rules()
     {
         return [
+            'name' => [
+                'string',
+                'required',
+            ],
+            'last_name' => [
+                'string',
+                'required',
+            ],
+            'email' => [
+                'required',
+                'unique:users',
+            ],
+            'password' => [
+                'required',
+            ], 
+            'phone' => [
+                'string',
+                'required',
+            ], 
             'number' => [
                 'required',
                 'integer',
@@ -29,30 +48,25 @@ class StoreStudentRequest extends FormRequest
             ],
             'academic_level' => [
                 'required',
-            ],
-            'relative_relation' => [
-                'required',
-            ],
-            'company_name' => [
-                'string',
-                'nullable',
-            ],
-            'license_number' => [
-                'nullable',
+            ], 
+            'identity_num' => [
+                'required', 
                 'integer',
+                'unique:users',
                 'min:-2147483648',
                 'max:2147483647',
             ],
-
-            'identity_num' => [
-                'string',
-                'required',
+            'parent_identity' => [
+                'required', 
+                'integer', 
+                'min:-2147483648',
+                'max:2147483647',
             ],
-            'identitty_photo' => [
+            'identity_photo' => [
                 'array',
                 'required',
             ],
-            'identitty_photo.*' => [
+            'identity_photo.*' => [
                 'required',
             ],
         ];

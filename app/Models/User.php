@@ -28,6 +28,7 @@ class User extends Authenticatable implements HasMedia
 
     protected $appends = [
         'photo',
+        'identity_photo',
     ];
 
     protected $hidden = [
@@ -49,9 +50,10 @@ class User extends Authenticatable implements HasMedia
         'email_verified_at',
         'password',
         'remember_token',
-        'phone',
-        'city',
+        'phone', 
         'user_type',
+        'identity_num',
+        'city_id',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -110,6 +112,24 @@ class User extends Authenticatable implements HasMedia
         }
 
         return $file;
+    }
+
+    
+    public function getIdentityPhotoAttribute()
+    {
+        $files = $this->getMedia('identity_photo');
+        $files->each(function ($item) {
+            $item->url = $item->getUrl();
+            $item->thumbnail = $item->getUrl('thumb');
+            $item->preview = $item->getUrl('preview');
+        });
+
+        return $files;
+    }
+    
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id');
     }
 
     protected function serializeDate(DateTimeInterface $date)

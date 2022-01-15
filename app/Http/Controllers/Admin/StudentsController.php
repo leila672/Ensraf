@@ -7,19 +7,21 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyStudentRequest;
 use App\Http\Requests\StoreStudentRequest;
 use App\Http\Requests\UpdateStudentRequest;
+use App\Models\MyParent;
 use App\Models\School;
 use App\Models\Student;
 use App\Models\User;
+use App\Models\City;
 use Gate;
 use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
-use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\Facades\DataTables; 
 Use Alert;
 
 
 class StudentsController extends Controller
-{
+{ 
     use MediaUploadingTrait;
 
     public function index(Request $request)
@@ -27,7 +29,7 @@ class StudentsController extends Controller
         abort_if(Gate::denies('student_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = Student::with(['school', 'user'])->select(sprintf('%s.*', (new Student())->table));
+            $query = Student::with(['school', 'user', 'parent'])->select(sprintf('%s.*', (new Student())->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -40,12 +42,12 @@ class StudentsController extends Controller
                 $crudRoutePart = 'students';
 
                 return view('partials.datatablesActions', compact(
-                'viewGate',
-                'editGate',
-                'deleteGate',
-                'crudRoutePart',
-                'row'
-            ));
+                    'viewGate',
+                    'editGate',
+                    'deleteGate',
+                    'crudRoutePart',
+                    'row'
+                ));
             });
 
             $table->editColumn('id', function ($row) {
@@ -56,25 +58,17 @@ class StudentsController extends Controller
             });
             $table->addColumn('school_name', function ($row) {
                 return $row->school ? $row->school->name : '';
-            });
-
-
+            }); 
             $table->editColumn('academic_level', function ($row) {
                 return $row->academic_level ? trans('global.academic_level.'.$row->academic_level ?? '' ): '';
-            });
-            $table->editColumn('relative_relation', function ($row) {
-                return $row->relative_relation ? trans('global.relative_relation.'.$row->relative_relation ?? '' ): '';
-            });
-            $table->editColumn('license_number', function ($row) {
-                return $row->license_number ? $row->license_number : '';
+            }); 
+            $table->editColumn('class_number', function ($row) {
+                return $row->class_number ? trans('global.class_number.'.$row->class_number ?? '' ): '';
             });
             $table->addColumn('user_email', function ($row) {
                 return $row->user ? $row->user->email : '';
             });
 
-            $table->editColumn('class_number', function ($row) {
-                return $row->class_number ? trans('global.class_number.'.$row->class_number ?? '' ): '';
-            });
 
             $table->rawColumns(['actions', 'placeholder', 'school', 'user']);
 
@@ -92,7 +86,9 @@ class StudentsController extends Controller
 
         $users = User::pluck('email', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.students.create', compact('schools', 'users'));
+        $cities = City::pluck('name_ar', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.students.create', compact('schools', 'users','cities'));
     }
 
     public function store(StoreStudentRequest $request)
@@ -103,34 +99,53 @@ class StudentsController extends Controller
             'name' => $request->name,
             'last_name' => $request->last_name,
             'phone' => $request->phone,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'phone' => $request->phone,
-            'user_type' => 'student',
-            'role'
+            'identity_num' => $request->identity_num,
+            'user_type' => 'student', 
         ]);
 
-        $student = Student::create ([
+        if ($request->input('photo', false)) {
+            $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('photo'))))->toMediaCollection('photo');
+        }
+
+        foreach ($request->input('identity_photo', []) as $file) {
+            $user->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('identity_photo');
+        }
+
+        if ($media = $request->input('ck-media', false)) {
+            Media::whereIn('id', $media)->update(['model_id' => $user->id]);
+        }
+        
+        $student = Student::create([
             'number'=>$request->number,
-            'school_id'=>$request->school_id,
-            'academic_level'=>$request->academic_level,
-            'relative_relation'=>$request->relative_relation,
-            'company_name'=>$request->company_name,
-            'license_number'=>$request->license_number,
-            'user_id'=>$user->id,
-            'identity_num'=>$request->identity_num,
+            'academic_level'=>$request->academic_level, 
             'class_number'=>$request->class_number,
-        ]);
+            'parent_identity'=>$request->parent_identity, 
+            'school_id'=>$request->school_id,
+            'user_id'=>$user->id, 
+        ]); 
 
-        foreach ($request->input('identitty_photo', []) as $file) {
-            $student->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('identitty_photo');
+        $user = User::where('identity_num',$request->parent_identity)->first();
+
+        if($user){ 
+            $myParent = MyParent::where('user_id',$user->id)->first();
+            if($myParent){
+                $student->parent_id = $myParent->id;
+                $student->save();
+            }
+        }
+        
+        if ($request->input('voice', false)) {
+            $student->addMedia(storage_path('tmp/uploads/' . basename($request->input('voice'))))->toMediaCollection('voice');
         }
 
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $student->id]);
         }
-
+        
         Alert::success(trans('global.flash.success'), trans('global.flash.created'));
         return redirect()->route('admin.students.index');
     }
@@ -143,52 +158,74 @@ class StudentsController extends Controller
 
         $users = User::pluck('email', 'id')->prepend(trans('global.pleaseSelect'), '');
 
+        $cities = City::pluck('name_ar', 'id')->prepend(trans('global.pleaseSelect'), '');
+
         $student->load('school', 'user');
 
-        return view('admin.students.edit', compact('schools', 'users', 'student'));
+        return view('admin.students.edit', compact('schools', 'users', 'student','cities'));
     }
 
     public function update(UpdateStudentRequest $request, Student $student)
     {
 
         $student->update([
-            'number'=>$request->number,
-            'school_id'=>$request->school_id,
+            'number'=>$request->number, 
             'academic_level'=>$request->academic_level,
-            'relative_relation'=>$request->relative_relation,
-            'company_name'=>$request->company_name,
-            'license_number'=>$request->license_number,
-            'identity_num'=>$request->identity_num,
             'class_number'=>$request->class_number,
+            'parent_identity'=>$request->parent_identity, 
+            'school_id'=>$request->school_id,
         ]);
 
-        $user = User::find($student->user_id);
+        $user = User::find($request->user_id);
 
         $user->update([
             'name' => $request->name,
             'last_name' => $request->last_name,
             'phone' => $request->phone,
-            'city' => $request->city,
+            'city_id' => $request->city_id,
             'email' => $request->email,
             'password' => $request->password == null ? $user->password : bcrypt($request->password), 
             'phone' => $request->phone,
+            'identity_num' => $request->identity_num,
             'user_type' => 'student',
         ]);
 
 
 
-        if (count($student->identitty_photo) > 0) {
-            foreach ($student->identitty_photo as $media) {
-                if (!in_array($media->file_name, $request->input('identitty_photo', []))) {
+        if ($request->input('photo', false)) {
+            if (!$user->photo || $request->input('photo') !== $user->photo->file_name) {
+                if ($user->photo) {
+                    $user->photo->delete();
+                }
+                $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('photo'))))->toMediaCollection('photo');
+            }
+        } elseif ($user->photo) {
+            $user->photo->delete();
+        }
+
+        if (count($user->identity_photo) > 0) {
+            foreach ($user->identity_photo as $media) {
+                if (!in_array($media->file_name, $request->input('identity_photo', []))) {
                     $media->delete();
                 }
             }
         }
-        $media = $student->identitty_photo->pluck('file_name')->toArray();
-        foreach ($request->input('identitty_photo', []) as $file) {
+        $media = $user->identity_photo->pluck('file_name')->toArray();
+        foreach ($request->input('identity_photo', []) as $file) {
             if (count($media) === 0 || !in_array($file, $media)) {
-                $student->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('identitty_photo');
+                $user->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('identity_photo');
             }
+        }
+
+        if ($request->input('voice', false)) {
+            if (!$student->voice || $request->input('voice') !== $student->voice->file_name) {
+                if ($student->voice) {
+                    $student->voice->delete();
+                }
+                $student->addMedia(storage_path('tmp/uploads/' . basename($request->input('voice'))))->toMediaCollection('voice');
+            }
+        } elseif ($student->voice) {
+            $student->voice->delete();
         }
 
         Alert::success(trans('global.flash.success'), trans('global.flash.updated'));
@@ -220,7 +257,6 @@ class StudentsController extends Controller
 
         return response(null, Response::HTTP_NO_CONTENT);
     }
-
     public function storeCKEditorImages(Request $request)
     {
         abort_if(Gate::denies('student_create') && Gate::denies('student_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');

@@ -11,6 +11,8 @@ class AddRelationshipFieldsToSchoolsTable extends Migration
         Schema::table('schools', function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id', 'user_fk_5122145')->references('id')->on('users');
+            $table->unsignedBigInteger('city_id');
+            $table->foreign('city_id', 'city_fk_5547563')->references('id')->on('cities');
         });
     }
 }

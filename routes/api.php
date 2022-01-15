@@ -1,8 +1,11 @@
 <?php
 
-Route::group(['prefix' => 'v1/user', 'as' => 'api.', 'namespace' => 'Api\V1\User'], function () {
+Route::group(['prefix' => 'v1/user', 'as' => 'api.', 'namespace' => 'Api\V1\User', 'middleware' => 'changelanguage'], function () {
 
     Route::post('login','UserAuthApiController@login'); 
+    Route::post('register','UserAuthApiController@register'); 
+    
+    Route::get('cities','SettingsApiController@cities'); 
     
     Route::group(['middleware' => ['auth:sanctum']],function () {
 
@@ -13,10 +16,11 @@ Route::group(['prefix' => 'v1/user', 'as' => 'api.', 'namespace' => 'Api\V1\User
             Route::get('/','UsersApiController@profile');
             Route::post('update','UsersApiController@update');
             Route::post('update_password','UsersApiController@update_password');
+            Route::post('update_voice','UsersApiController@update_voice');
         }); 
 
         // call
-        Route::get('call','CallController@call');
+        Route::get('call/{id}','CallController@call');
         
         // notifications
         Route::get('notifications','NotificationsApiController@index');

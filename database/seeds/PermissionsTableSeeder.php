@@ -138,6 +138,46 @@ class PermissionsTableSeeder extends Seeder
             ],
             [
                 'id'    => 33,
+                'title' => 'my_parent_create',
+            ],
+            [
+                'id'    => 34,
+                'title' => 'my_parent_edit',
+            ],
+            [
+                'id'    => 35,
+                'title' => 'my_parent_show',
+            ],
+            [
+                'id'    => 36,
+                'title' => 'my_parent_delete',
+            ],
+            [
+                'id'    => 37,
+                'title' => 'my_parent_access',
+            ],
+            [
+                'id'    => 38,
+                'title' => 'city_create',
+            ],
+            [
+                'id'    => 39,
+                'title' => 'city_edit',
+            ],
+            [
+                'id'    => 40,
+                'title' => 'city_show',
+            ],
+            [
+                'id'    => 41,
+                'title' => 'city_delete',
+            ],
+            [
+                'id'    => 42,
+                'title' => 'city_access',
+            ],
+            [
+                'id'    => 43,
                 'title' => 'profile_password_edit',
             ],
         ];

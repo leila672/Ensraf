@@ -87,10 +87,30 @@
                     </tr>
                     <tr>
                         <th>
+                            {{ trans('cruds.user.fields.identity_photo') }}
+                        </th>
+                        <td>
+                            @foreach($user->identity_photo as $key => $media)
+                                <a href="{{ $media->getUrl() }}" target="_blank" style="display: inline-block">
+                                    <img src="{{ $media->getUrl('thumb') }}">
+                                </a>
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ trans('cruds.user.fields.identity_num') }}
+                        </th>
+                        <td>
+                            {{ $user->identity_num }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
                             {{ trans('cruds.user.fields.city') }}
                         </th>
                         <td>
-                            {{ $user->city }}
+                            {{ $user->city->name_ar ?? '' }}
                         </td>
                     </tr>
                 </tbody>

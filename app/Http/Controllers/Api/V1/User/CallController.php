@@ -13,8 +13,9 @@ class CallController extends Controller
 {
     use api_return;
 
-    public function call(){
-        $student = Student::where('user_id',Auth::id())->first();
+    public function call($id){
+        
+        $student = Student::findOrFail($id);
 
         $first = $student->user->name ?? '';
         $last = $student->user->last_name ?? '';
@@ -25,6 +26,7 @@ class CallController extends Controller
             'academic_level' => $student->academic_level,
             'class_number' => $student->class_number,
             'name' => $first . ' ' . $last,
+            'voice' => $student->voice ? $student->voice->getUrl() : '',
         ];
 
         event(new CallStudent($data)); 

@@ -40,9 +40,19 @@ class UpdateUserRequest extends FormRequest
                 'string',
                 'required',
             ],
-            'city' => [
-                'string',
+            'identity_photo' => [
+                'array',
+            ],
+            'identity_num' => [
                 'required',
+                'unique:users,identity_num,' . request()->user_id,
+                'integer',
+                'min:-2147483648',
+                'max:2147483647',
+            ],
+            'city_id' => [
+                'required',
+                'integer',
             ],
         ];
     }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 use App\Http\Requests\MassDestroyUserRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\City;
 use App\Models\Role;
 use App\Models\User;
 use Gate;
@@ -14,7 +15,6 @@ use Illuminate\Http\Request;
 use Spatie\MediaLibrary\Models\Media;
 use Symfony\Component\HttpFoundation\Response;
 use Yajra\DataTables\Facades\DataTables;
-Use Alert;
 
 class UsersController extends Controller
 {
@@ -25,9 +25,7 @@ class UsersController extends Controller
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $query = User::where('user_type','staff')->with(['roles'])->select(sprintf('%s.*', (new User())->table));
-
-
+            $query = User::where('user_type','staff')->with(['roles', 'city'])->select(sprintf('%s.*', (new User())->table));
             $table = Datatables::of($query);
 
             $table->addColumn('placeholder', '&nbsp;');
@@ -68,6 +66,9 @@ class UsersController extends Controller
 
                 return implode(' ', $labels);
             });
+            $table->editColumn('identity_num', function ($row) {
+                return $row->identity_num ? $row->identity_num : '';
+            });
 
             $table->rawColumns(['actions', 'placeholder', 'roles']);
 
@@ -83,7 +84,9 @@ class UsersController extends Controller
 
         $roles = Role::pluck('title', 'id');
 
-        return view('admin.users.create', compact('roles'));
+        $cities = City::pluck('name_ar', 'id')->prepend(trans('global.pleaseSelect'), '');
+
+        return view('admin.users.create', compact('cities', 'roles'));
     }
 
     public function store(StoreUserRequest $request)
@@ -94,11 +97,14 @@ class UsersController extends Controller
             $user->addMedia(storage_path('tmp/uploads/' . basename($request->input('photo'))))->toMediaCollection('photo');
         }
 
+        foreach ($request->input('identity_photo', []) as $file) {
+            $user->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('identity_photo');
+        }
+
         if ($media = $request->input('ck-media', false)) {
             Media::whereIn('id', $media)->update(['model_id' => $user->id]);
         }
 
-        Alert::success(trans('global.flash.success'), trans('global.flash.created'));
         return redirect()->route('admin.users.index');
     }
 
@@ -108,9 +114,11 @@ class UsersController extends Controller
 
         $roles = Role::pluck('title', 'id');
 
-        $user->load('roles');
+        $cities = City::pluck('name_ar', 'id')->prepend(trans('global.pleaseSelect'), '');
 
-        return view('admin.users.edit', compact('roles', 'user'));
+        $user->load('roles', 'city');
+
+        return view('admin.users.edit', compact('cities', 'roles', 'user'));
     }
 
     public function update(UpdateUserRequest $request, User $user)
@@ -128,6 +136,20 @@ class UsersController extends Controller
             $user->photo->delete();
         }
 
+        if (count($user->identity_photo) > 0) {
+            foreach ($user->identity_photo as $media) {
+                if (!in_array($media->file_name, $request->input('identity_photo', []))) {
+                    $media->delete();
+                }
+            }
+        }
+        $media = $user->identity_photo->pluck('file_name')->toArray();
+        foreach ($request->input('identity_photo', []) as $file) {
+            if (count($media) === 0 || !in_array($file, $media)) {
+                $user->addMedia(storage_path('tmp/uploads/' . basename($file)))->toMediaCollection('identity_photo');
+            }
+        }
+
         return redirect()->route('admin.users.index');
     }
 
@@ -135,9 +157,8 @@ class UsersController extends Controller
     {
         abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $user->load('roles', 'userUserAlerts');
+        $user->load('roles', 'city', 'userUserAlerts');
 
-        Alert::success(trans('global.flash.success'), trans('global.flash.updated'));
         return view('admin.users.show', compact('user'));
     }
 
@@ -147,7 +168,6 @@ class UsersController extends Controller
 
         $user->delete();
 
-        Alert::success(trans('global.flash.success'), trans('global.flash.deleted'));
         return back();
     }
 
@@ -159,8 +179,7 @@ class UsersController extends Controller
     }
 
     public function storeCKEditorImages(Request $request)
-    {
-        abort_if(Gate::denies('user_create') && Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+    { 
 
         $model         = new User();
         $model->id     = $request->input('crud_id', 0);

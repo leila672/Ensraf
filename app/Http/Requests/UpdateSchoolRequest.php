@@ -16,11 +16,7 @@ class UpdateSchoolRequest extends FormRequest
 
     public function rules()
     {
-        return [
-            'city' => [
-                'string',
-                'required',
-            ],
+        return [ 
             'area' => [
                 'string',
                 'required',
@@ -28,11 +24,7 @@ class UpdateSchoolRequest extends FormRequest
             'sector' => [
                 'string',
                 'required',
-            ],
-            'name' => [
-                'string',
-                'required',
-            ],
+            ], 
             'classificaion' => [
                 'string',
                 'required',
@@ -51,6 +43,37 @@ class UpdateSchoolRequest extends FormRequest
                 'required',
                 'date_format:' . config('panel.time_format'),
             ],
+            
+            'city_id' => [
+                'required',
+                'integer',
+            ],
+            'identity_num' => [
+                'required',
+                'unique:users,identity_num,' . request()->user_id,
+                'integer',
+                'min:-2147483648',
+                'max:2147483647',
+            ],
+            'identity_photo' => [
+                'array',
+            ],
+            'email' => [
+                'required',
+                'unique:users,email,' . request()->user_id,
+            ], 
+            'name' => [
+                'string',
+                'required',
+            ],
+            'last_name' => [
+                'string',
+                'required',
+            ],  
+            'phone' => [
+                'string',
+                'required',
+            ], 
         ];
     }
 }

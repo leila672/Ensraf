@@ -43,9 +43,19 @@ class StoreUserRequest extends FormRequest
                 'string',
                 'required',
             ],
-            'city' => [
-                'string',
+            'identity_photo' => [
+                'array',
+            ],
+            'identity_num' => [
                 'required',
+                'nullable',
+                'integer',
+                'min:-2147483648',
+                'max:2147483647',
+            ],
+            'city_id' => [
+                'required',
+                'integer',
             ],
         ];
     }
