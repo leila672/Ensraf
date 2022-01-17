@@ -15,10 +15,13 @@ class Staff
      * @return mixed
      */
     public function handle($request, Closure $next)
-    {
+    { 
         if(Auth::user()->user_type == 'school'){
             return redirect()->route('schools.home');
+        }elseif(Auth::user()->user_type == 'staff'){
+            return $next($request);
+        }else{
+            return abort(403);
         }
-        return $next($request);
     }
 }

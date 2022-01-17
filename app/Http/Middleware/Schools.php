@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 
 use Auth;
+
 class Schools
 {
     /**
@@ -16,10 +17,13 @@ class Schools
      */
     public function handle($request, Closure $next)
     {
-        if(Auth::user()->user_type == 'staff'){
+        if(Auth::user()->user_type == 'school'){
+            return $next($request);
+        }elseif(Auth::user()->user_type == 'staff'){
             return redirect()->route('admin.home');
+        }else{
+            return abort(403);
         }
-        return $next($request);
     }
 }
 

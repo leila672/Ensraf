@@ -10,6 +10,9 @@
             <form method="POST" action="{{ route('admin.schools.update', [$school->id]) }}" enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
+                <input type="hidden" name="latitude" id="latitude" value="{{ $school->latitude }}">
+                <input type="hidden" name="longitude" id="longitude" value="{{ $school->longitude }}">
+                
                 <input type="hidden" name="user_id" value="{{ $school->user_id }}">
                 <p style="text-align: center ; color: rgb(187, 42, 42) ; font-size: 25px">   {{ trans('cruds.user.manager_info') }}</p>
                 <div class="row">
@@ -196,29 +199,7 @@
                             </div>
                         @endif
                         <span class="help-block">{{ trans('cruds.school.fields.classificaion_helper') }}</span>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="longitude">{{ trans('cruds.school.fields.longitude') }}</label>
-                        <input class="form-control {{ $errors->has('longitude') ? 'is-invalid' : '' }}" type="number"
-                            name="longitude" id="longitude" value="{{ old('longitude', $school->longitude) }}" step="0.01">
-                        @if ($errors->has('longitude'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('longitude') }}
-                            </div>
-                        @endif
-                        <span class="help-block">{{ trans('cruds.school.fields.longitude_helper') }}</span>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="latitude">{{ trans('cruds.school.fields.latitude') }}</label>
-                        <input class="form-control {{ $errors->has('latitude') ? 'is-invalid' : '' }}" type="number"
-                            name="latitude" id="latitude" value="{{ old('latitude', $school->latitude) }}" step="0.01">
-                        @if ($errors->has('latitude'))
-                            <div class="invalid-feedback">
-                                {{ $errors->first('latitude') }}
-                            </div>
-                        @endif
-                        <span class="help-block">{{ trans('cruds.school.fields.latitude_helper') }}</span>
-                    </div>
+                    </div> 
                     <div class="form-group col-md-4">
                         <label class="required" for="end_time">{{ trans('cruds.school.fields.end_time') }}</label>
                         <input class="form-control timepicker {{ $errors->has('end_time') ? 'is-invalid' : '' }}" type="text"
@@ -242,6 +223,10 @@
                         @endif
                         <span class="help-block">{{ trans('cruds.school.fields.start_time_helper') }}</span>
                     </div>
+                    <div class="form-group col-md-8">
+                        <input style="width: 300px" id="pac-input" class="form-control" type="text" placeholder="Search Box" />
+                        <div id="map3" class="m-b30 align-self-stretch" style="width: 100%; height: 400px"></div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -258,6 +243,85 @@
 @endsection
 
 @section('scripts')
+
+    <script>
+        let markers = []; 
+        let map;
+
+        function myMap3() {
+            var mapCanvas = document.getElementById("map3");
+            var mapOptions = {
+                center: new google.maps.LatLng('{{ $school->latitude }}', '{{ $school->longitude }}'),
+                zoom: 14,
+                mapTypeId: "roadmap",
+            };
+            map = new google.maps.Map(mapCanvas, mapOptions);
+
+            // Create the search box and link it to the UI element.
+            const input = document.getElementById("pac-input");
+            const searchBox = new google.maps.places.SearchBox(input);
+
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+            // Bias the SearchBox results towards current map's viewport.
+            map.addListener("bounds_changed", () => {
+                searchBox.setBounds(map.getBounds());
+            });
+
+            // Listen for the event fired when the user selects a prediction and retrieve
+            // more details for that place.
+            searchBox.addListener("places_changed", () => {
+                const places = searchBox.getPlaces();
+
+                if (places.length == 0) {
+                    return;
+                }
+
+                // For each place, get the icon, name and location.
+                const bounds = new google.maps.LatLngBounds();
+
+                places.forEach((place) => {
+                    if (!place.geometry || !place.geometry.location) {
+                        console.log("Returned place contains no geometry");
+                        return;
+                    }
+
+                    addmarker(place.geometry.location.lat(), place.geometry.location.lng());
+
+                    if (place.geometry.viewport) {
+                        // Only geocodes have viewport.
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            });
+
+            addmarker('{{ $school->latitude }}', '{{ $school->longitude }}');
+
+            // Configure the click listener.
+            map.addListener("click", (mapsMouseEvent) => {
+
+                addmarker(mapsMouseEvent.latLng.lat(), mapsMouseEvent.latLng.lng()); 
+            });
+        }
+        google.maps.event.addDomListener(window, 'load', myMap3);
+
+        function addmarker(lat, lng, title = '') {
+            for (let i = 0; i < markers.length; i++) {
+                markers[i].setMap(null); 
+            }
+
+            const marker = new google.maps.Marker({
+                position: new google.maps.LatLng(lat, lng),
+                map,
+                title: title,
+            });
+            $('#latitude').val(lat);
+            $('#longitude').val(lng);
+            markers.push(marker); 
+        }
+    </script>
     <script>
         Dropzone.options.photoDropzone = {
             url: '{{ route('admin.users.storeMedia') }}',

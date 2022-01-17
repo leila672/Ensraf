@@ -233,9 +233,11 @@ class StudentsController extends Controller
     {
 
 
-        $student->load('school', 'user');
+        $student->load('school', 'user','parent');
 
-        return view('schools.students.show', compact('student'));
+        $myParent = $student->parent;
+
+        return view('schools.students.show', compact('student','myParent'));
     }
 
     public function destroy(Student $student)

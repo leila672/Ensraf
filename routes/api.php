@@ -7,6 +7,10 @@ Route::group(['prefix' => 'v1/user', 'as' => 'api.', 'namespace' => 'Api\V1\User
     
     Route::get('cities','SettingsApiController@cities'); 
     
+    //forgetpassword
+    Route::post('forgetpassword','ForgetPasswordController@create_token');
+    Route::post('forgetpassword/reset','ForgetPasswordController@reset');
+    
     Route::group(['middleware' => ['auth:sanctum']],function () {
 
         Route::post('fcm-token','UsersApiController@update_fcm_token');

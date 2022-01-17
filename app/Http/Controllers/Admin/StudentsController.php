@@ -236,9 +236,11 @@ class StudentsController extends Controller
     {
         abort_if(Gate::denies('student_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
-        $student->load('school', 'user');
+        $student->load('school', 'user','parent');
 
-        return view('admin.students.show', compact('student'));
+        $myParent = $student->parent;
+
+        return view('admin.students.show', compact('student','myParent'));
     }
 
     public function destroy(Student $student)
