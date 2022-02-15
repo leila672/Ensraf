@@ -13,7 +13,7 @@ class CreateStudentsTable extends Migration
             $table->integer('number');
             $table->string('academic_level');
             $table->string('class_number')->nullable();
-            $table->integer('parent_identity');
+            $table->string('parent_identity');
             $table->timestamps();
             $table->softDeletes();
         });

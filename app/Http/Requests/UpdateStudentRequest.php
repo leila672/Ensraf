@@ -35,14 +35,7 @@ class UpdateStudentRequest extends FormRequest
             ],
             'identity_photo' => [
                 'array',
-            ],
-            'identity_num' => [
-                'required',
-                'unique:users',
-                'integer',
-                'min:-2147483648',
-                'max:2147483647',
-            ],
+            ], 
             'city_id' => [
                 'required',
                 'integer',
@@ -50,8 +43,6 @@ class UpdateStudentRequest extends FormRequest
             'number' => [
                 'required',
                 'integer',
-                'min:-2147483648',
-                'max:2147483647',
             ],
             'school_id' => [
                 'required',
@@ -62,16 +53,10 @@ class UpdateStudentRequest extends FormRequest
             ], 
             'identity_num' => [
                 'required', 
-                'integer',
-                'unique:users,identity_num,' . request()->user_id,
-                'min:-2147483648',
-                'max:2147483647',
+                'unique:users,identity_num,' . request()->user_id, 
             ],
             'parent_identity' => [
                 'required', 
-                'integer', 
-                'min:-2147483648',
-                'max:2147483647',
             ],
             'identity_photo' => [
                 'array',

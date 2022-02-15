@@ -39,8 +39,6 @@ class StoreStudentRequest extends FormRequest
             'number' => [
                 'required',
                 'integer',
-                'min:-2147483648',
-                'max:2147483647',
             ],
             'school_id' => [
                 'required',
@@ -51,16 +49,10 @@ class StoreStudentRequest extends FormRequest
             ], 
             'identity_num' => [
                 'required', 
-                'integer',
-                'unique:users',
-                'min:-2147483648',
-                'max:2147483647',
+                'unique:users,identity_num', 
             ],
             'parent_identity' => [
                 'required', 
-                'integer', 
-                'min:-2147483648',
-                'max:2147483647',
             ],
             'identity_photo' => [
                 'array',

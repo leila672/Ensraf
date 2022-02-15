@@ -17,7 +17,7 @@ use App\Http\Controllers\Traits\MediaUploadingTrait;
 class UserAuthApiController extends Controller
 { 
     use api_return;  
-    use MediaUploadingTrait;
+    use MediaUploadingTrait; 
 
     public function register(Request $request){
 
@@ -30,6 +30,8 @@ class UserAuthApiController extends Controller
             'identity_num' => 'required|integer|unique:users',
             'city_id' => 'required|integer',
             'relative_relation' => 'required|in:father,brother,driver', 
+            'photo' => 'required|image|mimes:jpeg,png,jpg|max:5120',
+            'identity_photo' => 'required|image|mimes:jpeg,png,jpg|max:5120',
         ];   
         
         $validator = Validator::make($request->all(), $rules);
@@ -50,27 +52,6 @@ class UserAuthApiController extends Controller
             'user_type' => 'parent', 
         ]);
 
-        if (request()->hasFile('photo') && request('photo') != ''){
-            $validator = Validator::make($request->all(), [
-                'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            ]);
-            if ($validator->fails()) {
-                return $this->returnError('401', $validator->errors());
-            } 
-
-            $user->addMedia(request('photo'))->toMediaCollection('photo'); 
-        }
-        
-        if (request()->hasFile('identity_photo') && request('identity_photo') != ''){
-            $validator = Validator::make($request->all(), [
-                'identity_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            ]);
-            if ($validator->fails()) {
-                return $this->returnError('401', $validator->errors());
-            } 
-
-            $user->addMedia(request('identity_photo'))->toMediaCollection('identity_photo'); 
-        }
 
         $myParent = MyParent::create([
             'relative_relation'=>$request->relative_relation,
@@ -79,7 +60,6 @@ class UserAuthApiController extends Controller
             'user_id'=>$user->id, 
         ]);
         
-
         $students = Student::where('parent_identity',$request->identity_num)->get();
 
         foreach($students as $student){
@@ -89,12 +69,22 @@ class UserAuthApiController extends Controller
 
         $token = $user->createToken('user_token')->plainTextToken;
 
+        if (request()->hasFile('photo') && request('photo') != ''){
+            $user->addMedia(request('photo'))->toMediaCollection('photo'); 
+        } 
+
+        if (request()->hasFile('identity_photo') && request('identity_photo') != ''){
+            $user->addMedia(request('identity_photo'))->toMediaCollection('identity_photo');  
+        }
+        
+
         return $this->returnData(
             [
                 'user_token' => $token,
                 'user_id '=> $user->id
             ]
         );
+
 
     } 
 
