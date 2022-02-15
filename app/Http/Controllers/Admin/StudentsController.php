@@ -228,6 +228,17 @@ class StudentsController extends Controller
             $student->voice->delete();
         }
 
+        // sync parent
+        $user = User::where('identity_num',$request->parent_identity)->first();
+
+        if($user){ 
+            $myParent = MyParent::where('user_id',$user->id)->first();
+            if($myParent){
+                $student->parent_id = $myParent->id;
+                $student->save();
+            }
+        }
+
         Alert::success(trans('global.flash.success'), trans('global.flash.updated'));
         return redirect()->route('admin.students.index');
     }
