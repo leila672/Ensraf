@@ -148,7 +148,7 @@
     channel.bind('App\\Events\\CallStudent',function(obj){ 
         var rand = Math.floor(Math.random() * 10) + 1;
         if(obj['school_id'] == '{{$school->id}}'){
-            var ul = '<div class="name" id="' + obj['student_id'] + '"> <p class="bullet">' + obj['class_number'] + '</p> <li>' + obj['name'] + rand + '</li> </div>';
+            var ul = '<div class="name" id="' + obj['student_id'] + '"> <p class="bullet">' + obj['class_number'] + '</p> <li>' + obj['name'] + '</li> </div>';
             
             var col1_length = $('#grade'+obj['academic_level']+'-col1 > div').length;
             var col2_length = $('#grade'+obj['academic_level']+'-col2 > div').length;
